@@ -15,6 +15,7 @@ process.source = cms.Source ( "EmptySource" )
 #    debugModules = cms.untracked.vstring ( "*" ),
 #    #suppressWarning = cms.untracked.vstring ( "source", "l1GctHwDigis" )
 
+# Add data text file here
 process.gctRaw = cms.OutputModule( "TextToRaw",
  #Only select one of these at a time
  #filename = cms.untracked.string ( "counter_2008_03_04.dat" )
