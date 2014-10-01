@@ -16,7 +16,7 @@ process.output = cms.OutputModule(
 
 #Logger
 process.MessageLogger = cms.Service ("MessageLogger",
-    destinations = cms.untracked.vstring ( "detailedInfo.txt" ),
+    destinations = cms.untracked.vstring ( "detailedInfo_hacked.txt" ),
 #    detailedInfo.txt = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
 #    debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
         debugModules = cms.untracked.vstring ( "*" ),)
@@ -28,7 +28,7 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
  #filename = cms.untracked.string ( "counter_2008_03_04.dat" )
  #filename = cms.untracked.string ( "logical_id_2008_03_04.dat" )
  #filename = cms.untracked.string ( "jet_counter_2008_05_14.dat" )
-    filename = cms.untracked.string ( "logical_id.txt" )
+    filename = cms.untracked.string ( "logical_id_hacked.txt" )
  #   GctFedId = cms.untracked.int32( 745 )
 )
 
