@@ -48,7 +48,7 @@ process.l1GctHwDigis = cms.EDProducer( "GctRawToDigi",
   unpackSharedRegions = cms.bool(False),	
   unpackerVersion = cms.uint32(3)	
 )
-
+# The last 4 above, numberOfGctSampleToUnpack -> unpackerVersion were included to get it working 
 
 #Fibre Analyzer
 process.FibreAnalysis = cms.EDAnalyzer( "GctFibreAnalyzer",
