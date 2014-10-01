@@ -15,11 +15,11 @@ process.output = cms.OutputModule(
 )
 
 #Logger
-process.MessageLogger = cms.Service ("MessageLogger",
-    destinations = cms.untracked.vstring ( "detailedInfo.txt" ),
-    detailedInfo.txt = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
-    debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
-        debugModules = cms.untracked.vstring ( "*" ),)
+#process.MessageLogger = cms.Service ("MessageLogger",
+ #   destinations = cms.untracked.vstring ( "detailedInfo.txt" ),
+  #  detailedInfo.txt = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
+   # debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
+    #    debugModules = cms.untracked.vstring ( "*" ),)
 #    #suppressWarning = cms.untracked.vstring ( "source", "l1GctHwDigis" )
 
 process.gctRaw = cms.EDProducer( "TextToRaw",
@@ -27,12 +27,13 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
  #filename = cms.untracked.string ( "counter_2008_03_04.dat" )
  #filename = cms.untracked.string ( "logical_id_2008_03_04.dat" )
  #filename = cms.untracked.string ( "jet_counter_2008_05_14.dat" )
-    filename = cms.untracked.string ( "logicalid.dat" )
+    filename = cms.untracked.string ( "logical_id.txt" )
+ #   GctFedId = cms.untracked.int32( 745 )
 )
 
 process.l1GctHwDigis = cms.EDProducer( "GctRawToDigi",
   inputLabel = cms.InputTag("gctRaw"),
-  gctFedId = cms.int32(745),
+  gctFedId = cms.untracked.int32(745),
   verbose = cms.untracked.bool(False),
   hltMode = cms.bool(False),
   grenCompatibilityMode = cms.bool(False),
@@ -41,8 +42,13 @@ process.l1GctHwDigis = cms.EDProducer( "GctRawToDigi",
   unpackEtSums = cms.untracked.bool(True),
   unpackInternEm = cms.untracked.bool(True),
   unpackRct = cms.untracked.bool(True),
-  unpackFibres = cms.untracked.bool(True)
+  unpackFibres = cms.untracked.bool(True),
+  numberOfGctSamplesToUnpack = cms.uint32(5),
+  numberOfRctSamplesToUnpack = cms.uint32(5),
+  unpackSharedRegions = cms.bool(False),	
+  unpackerVersion = cms.uint32(3)	
 )
+
 
 #Fibre Analyzer
 process.FibreAnalysis = cms.EDAnalyzer( "GctFibreAnalyzer",
