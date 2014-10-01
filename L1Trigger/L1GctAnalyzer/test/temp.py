@@ -15,12 +15,13 @@ process.output = cms.OutputModule(
 )
 
 #Logger
-#process.MessageLogger = cms.Service ("MessageLogger",
- #   destinations = cms.untracked.vstring ( "detailedInfo.txt" ),
-  #  detailedInfo.txt = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
-   # debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
-    #    debugModules = cms.untracked.vstring ( "*" ),)
-#    #suppressWarning = cms.untracked.vstring ( "source", "l1GctHwDigis" )
+process.MessageLogger = cms.Service ("MessageLogger",
+    destinations = cms.untracked.vstring ( "detailedInfo.txt" ),
+#    detailedInfo.txt = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
+#    debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
+        debugModules = cms.untracked.vstring ( "*" ),)
+#    suppressWarning = cms.untracked.vstring ( "source", "l1GctHwDigis" )
+
 
 process.gctRaw = cms.EDProducer( "TextToRaw",
  #Only select one of these at a time
