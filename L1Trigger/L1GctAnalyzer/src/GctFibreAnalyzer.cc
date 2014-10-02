@@ -35,10 +35,15 @@ GctFibreAnalyzer::GctFibreAnalyzer(const edm::ParameterSet& iConfig):
 
 GctFibreAnalyzer::~GctFibreAnalyzer()
 {
+  //std::cout << "Beginning analysis" << std::endl; 
   edm::LogInfo("Zero Fibreword events") << "Total number of events with zero fibrewords: " << m_numZeroEvents;
   edm::LogInfo("Inconsistent Payload events") << "Total number of events with inconsistent payloads: " << m_numInconsistentPayloadEvents;
-  if(m_doCounter){edm::LogInfo("Successful events") << "Total number of Successful events: " << m_numConsistentEvents;}
+  		
+  if(m_doCounter){edm::LogInfo("Successful events") << "Total number of Successful events: " << m_numConsistentEvents;
+	std::cout << "Total number of Successful events: " << m_numConsistentEvents << std::endl;
+	}
 }
+
 
 void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
@@ -53,7 +58,16 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   unsigned int flag_for_consistency = 0;
   int flag_for_consistent_events = 0;
 
+	//std::cout << "fibre size: " << fibre->size() << std::endl;
+	//std::cout << "fibre end: " << fibre->begin() << std::endl;
+	
+	if(fibre->size() == 0){edm::LogInfo("Fibre size error") << "Fibre size is 0";}
+
+
+
   for (L1GctFibreCollection::const_iterator f=fibre->begin(); f!=fibre->end(); f++){
+
+	std::cout << "Beginning analysis" << std::endl;
 	
     if (f->data()!=0)
       {
@@ -66,7 +80,9 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         // Check for corrupt fibre data
         if (!CheckFibreWord(*f)){
           edm::LogInfo("GCT fibre data error") << "Missing phase bit (clock) in fibre data " << (*f);
+	std::cout << "GCT fibre data error: Missing phase bit (clock) in fibre data" << std::endl;
         }
+	else{edm::LogInfo("GCT fibre no data error") << "All good" << (*f);}
     
         // Check for BC0
         if (CheckForBC0(*f) && (f==fibre->begin())) {
@@ -77,7 +93,8 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         if ((bc0 && !CheckForBC0(*f)) ||
             (!bc0 && CheckForBC0(*f))){
           edm::LogInfo("GCT fibre data error") << "BC0 mismatch in fibre data " << (*f);
-        }
+       	std::cout << "GCT fibre data error: BC0 mismatch in fibre data" << std::endl;
+	 }
 
         // Check logical ID pattern
         if (m_doLogicalID) CheckLogicalID(*f);
@@ -265,6 +282,16 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                        << " " << fibre; //screwed up
                 }
 
+	     // Added by Dom
+	      if(source_card_id_expected == source_card_id_read)
+	 	{
+		  edm::LogInfo("GCT fibre NO data error") << "ETA0 Source Cards IDs match"
+							  << "Expected ID = " << source_card_id_expected
+							  << " ID read from data = " << source_card_id_read
+						          << " " << fibre;
+		}		
+
+
               if( (fibre.data() & 0xFF) != ref_eta0_link[fibre.index()])
                 {
                   edm::LogInfo("GCT fibre data error") << "ETA0 Fibres do not match "  
@@ -272,6 +299,14 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                        << " Fibre read from data = " << (fibre.data() & 0xFF)
                                                        << " " << fibre; //screwed up
                 }
+	
+	      if( (fibre.data() & 0xFF) == ref_eta0_link[fibre.index()])
+		{
+		    edm::LogInfo("GCT fibre NO data error" ) << "ETA0 Fibres match"
+							     << "Expected Fibre = " << ref_eta0_link[fibre.index()]
+	    						     <<" Fibre read from data = " << (fibre.data() & 0xFF)
+							     << " " << fibre;
+		}		
             }
           else edm::LogInfo("GCT fibre data error") << "ETA0 Fibre index out of bounds " << fibre;
           //edm::LogInfo("Fibre Index Info") << "ETA0 Fibre index = " << fibre.index();
