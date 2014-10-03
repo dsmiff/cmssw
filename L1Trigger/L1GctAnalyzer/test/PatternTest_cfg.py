@@ -8,18 +8,27 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process('GctPatternTester')
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger.cout.placeholder = cms.untracked.bool(False)
-process.MessageLogger.cout.threshold = cms.untracked.string('DEBUG')
-process.MessageLogger.debugModules = cms.untracked.vstring('*')
+#process.MessageLogger.cout.placeholder = cms.untracked.bool(False)
+#process.MessageLogger.cout.threshold = cms.untracked.string('DEBUG')
+#process.MessageLogger.debugModules = cms.untracked.vstring('*')
 
 process.source = cms.Source ( "EmptySource" )
 
 # One orbit of data is default for capture 
 process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3563 ) )
 
+# Message Logger
+process.MessageLogger = cms.Service("MessageLogger",
+	destinations = cms.untracked.vstring("PatternTest_single_e_DetailedInfo"),
+	PatternTest_single_e_DetailedInfo = cms.untracked.PSet( threshold = cms.untracked.string("DEBUG") ),
+	debugModules = cms.untracked.vstring("*")
+)
+
+
+
 # Input captured ascii file
 process.gctRaw = cms.EDProducer( "TextToRaw",
-                                   filename = cms.untracked.string ( "patternCapture_ts__2010_09_03__13h19m20s.txt" ),
+                                   filename = cms.untracked.string ( "single_e.txt" ),
                                    GctFedId = cms.untracked.int32 ( 745 )
                                    )
 

@@ -30,24 +30,27 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
  #filename = cms.untracked.string ( "logical_id_2008_03_04.dat" )
  #filename = cms.untracked.string ( "jet_counter_2008_05_14.dat" )
     filename = cms.untracked.string ( "logical_id.txt" )
+    #GctFedId =  cms.untracked.int32( 745 ),
+    #FileEventOffset = cms.untracked.int32( 0 ) 
+
 )
 
 process.l1GctHwDigis = cms.EDProducer( "GctRawToDigi",
   inputLabel = cms.InputTag("gctRaw"),
   gctFedId = cms.untracked.int32(745),
-  verbose = cms.untracked.bool(False),
+  verbose = cms.untracked.bool(True),
   hltMode = cms.bool(False),
   grenCompatibilityMode = cms.bool(False),
-  unpackEm = cms.untracked.bool(True),
-  unpackJets = cms.untracked.bool(True),
-  unpackEtSums = cms.untracked.bool(True),
-  unpackInternEm = cms.untracked.bool(True),
-  unpackRct = cms.untracked.bool(True),
+  unpackEm = cms.untracked.bool(False),
+  unpackJets = cms.untracked.bool(False),
+  unpackEtSums = cms.untracked.bool(False),
+  unpackInternEm = cms.untracked.bool(False),
+  unpackRct = cms.untracked.bool(False),
   unpackFibres = cms.untracked.bool(True),
-  numberOfGctSamplesToUnpack = cms.uint32(5),
-  numberOfRctSamplesToUnpack = cms.uint32(5),
-  unpackSharedRegions  = cms.bool(True),  
-  unpackerVersion = cms.uint32(3)
+  numberOfGctSamplesToUnpack = cms.uint32(1),
+  numberOfRctSamplesToUnpack = cms.uint32(1),
+  unpackSharedRegions  = cms.bool(False),  
+  unpackerVersion = cms.uint32(2)
 )
 
 

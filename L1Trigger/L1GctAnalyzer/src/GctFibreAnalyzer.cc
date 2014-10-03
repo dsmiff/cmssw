@@ -13,6 +13,8 @@ Description: Analyzer individual fibre channels from the source card.
 //         Created:  Thu Jul 12 14:21:06 CEST 2007
 //
 //
+#include <iostream>
+#include <typeinfo>
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h" // Logger
 #include "FWCore/Utilities/interface/Exception.h" // Exceptions
@@ -29,8 +31,14 @@ GctFibreAnalyzer::GctFibreAnalyzer(const edm::ParameterSet& iConfig):
   m_doCounter(iConfig.getUntrackedParameter<bool>("doCounter")),
   m_numZeroEvents(0),
   m_numInconsistentPayloadEvents(0),
-  m_numConsistentEvents(0)
+  m_numConsistentEvents(0) 
+  //consumes<L1GctFibreCollection>(m_fibreSource)
+  //consumes<L1GctFibreCollection>(m_fibreSource);
+
+// These values are initialised, constructor function is empty
 {
+ consumes<L1GctFibreCollection>(m_fibreSource);	
+// Recent addition 03/10/14
 }
 
 GctFibreAnalyzer::~GctFibreAnalyzer()
@@ -48,9 +56,15 @@ GctFibreAnalyzer::~GctFibreAnalyzer()
 void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
+  using namespace std;
   
-  Handle<L1GctFibreCollection> fibre;
-  iEvent.getByLabel(m_fibreSource,fibre);
+  //EDGetToken m_fibreToken; 	
+
+  Handle<L1GctFibreCollection> fibre;  
+  iEvent.getByLabel(m_fibreSource,fibre);  
+  //m_fibreToken = consumes<L1GctFibreCollection>(m_fibreSource);
+
+  //iEvent.getByToken(m_fibreToken,fibre);	
 
   bool bc0= false;
   int flag_for_zeroes = 0;
@@ -60,15 +74,17 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 	//std::cout << "fibre size: " << fibre->size() << std::endl;
 	//std::cout << "fibre end: " << fibre->begin() << std::endl;
-	
-	if(fibre->size() == 0){edm::LogInfo("Fibre size error") << "Fibre size is 0";}
+	//cout << "L1GctFibreCollection is of the type: " << typeid(L1GctFibreCollection).name() << endl;		
+
+	//if(fibre->size() == 0){edm::LogInfo("Fibre size error") << "Fibre size is 0";}
 
 
 
   for (L1GctFibreCollection::const_iterator f=fibre->begin(); f!=fibre->end(); f++){
 
-	std::cout << "Beginning analysis" << std::endl;
-	
+
+	cout << "START ANALYSIS" << endl;	
+
     if (f->data()!=0)
       {
         if(m_doCounter) 

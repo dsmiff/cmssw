@@ -3,6 +3,7 @@
 #
 # Alex Tapper 8/9/10
 #
+import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('GctPatternTester')
 
@@ -18,7 +19,7 @@ process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3563 ) )
 
 # Input captured ascii file
 process.gctRaw = cms.EDProducer( "TextToRaw",
-                                   filename = cms.untracked.string ( "patternCapture_ts__2010_09_03__13h19m20s.txt" ),
+                                   filename = cms.untracked.string ( "single_e.txt" ),
                                    GctFedId = cms.untracked.int32 ( 745 )
                                    )
 
