@@ -18,6 +18,7 @@ Description: Analyzer individual fibre channels from the source card.
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h" // Logger
 #include "FWCore/Utilities/interface/Exception.h" // Exceptions
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 // Include file
 #include "L1Trigger/L1GctAnalyzer/interface/GctFibreAnalyzer.h"
@@ -26,19 +27,18 @@ Description: Analyzer individual fibre channels from the source card.
 #include "DataFormats/L1GlobalCaloTrigger/interface/L1GctCollections.h"
 
 GctFibreAnalyzer::GctFibreAnalyzer(const edm::ParameterSet& iConfig):
-  m_fibreSource(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource")),
+//  m_fibreSource(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource")),
+ //m_fibreSource = comsumes<L1GctFibreCollection>(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource"))
   m_doLogicalID(iConfig.getUntrackedParameter<bool>("doLogicalID")),
   m_doCounter(iConfig.getUntrackedParameter<bool>("doCounter")),
   m_numZeroEvents(0),
   m_numInconsistentPayloadEvents(0),
   m_numConsistentEvents(0) 
-  //consumes<L1GctFibreCollection>(m_fibreSource)
-  //consumes<L1GctFibreCollection>(m_fibreSource);
+  
 
-// These values are initialised, constructor function is empty
 {
- consumes<L1GctFibreCollection>(m_fibreSource);	
-// Recent addition 03/10/14
+m_fibreSource = consumes<L1GctFibreCollection>(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource"));
+// Recent addition 03/10/14. Changing getByLabel to getByToken
 }
 
 GctFibreAnalyzer::~GctFibreAnalyzer()
@@ -61,10 +61,8 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   //EDGetToken m_fibreToken; 	
 
   Handle<L1GctFibreCollection> fibre;  
-  iEvent.getByLabel(m_fibreSource,fibre);  
-  //m_fibreToken = consumes<L1GctFibreCollection>(m_fibreSource);
-
-  //iEvent.getByToken(m_fibreToken,fibre);	
+ // iEvent.getByLabel(m_fibreSource,fibre);  
+  iEvent.getByToken(m_fibreSource,fibre);	
 
   bool bc0= false;
   int flag_for_zeroes = 0;
@@ -76,8 +74,8 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	//std::cout << "fibre end: " << fibre->begin() << std::endl;
 	//cout << "L1GctFibreCollection is of the type: " << typeid(L1GctFibreCollection).name() << endl;		
 
-	//if(fibre->size() == 0){edm::LogInfo("Fibre size error") << "Fibre size is 0";}
-
+	if(fibre->size() == 0){edm::LogInfo("Fibre size error") << "Fibre size is 0";}
+	//else{edm::LogInfo("Fibre size non-zero") << "Fibre size NOT 0"; }
 
 
   for (L1GctFibreCollection::const_iterator f=fibre->begin(); f!=fibre->end(); f++){
@@ -98,7 +96,7 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
           edm::LogInfo("GCT fibre data error") << "Missing phase bit (clock) in fibre data " << (*f);
 	std::cout << "GCT fibre data error: Missing phase bit (clock) in fibre data" << std::endl;
         }
-	else{edm::LogInfo("GCT fibre no data error") << "All good" << (*f);}
+//	else{edm::LogInfo("GCT fibre NO data error") << "NO GCT fibre data error " << (*f);}
     
         // Check for BC0
         if (CheckForBC0(*f) && (f==fibre->begin())) {
@@ -299,14 +297,14 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                 }
 
 	     // Added by Dom
-	      if(source_card_id_expected == source_card_id_read)
+	     /* if(source_card_id_expected == source_card_id_read)
 	 	{
 		  edm::LogInfo("GCT fibre NO data error") << "ETA0 Source Cards IDs match"
 							  << "Expected ID = " << source_card_id_expected
 							  << " ID read from data = " << source_card_id_read
 						          << " " << fibre;
 		}		
-
+*/
 
               if( (fibre.data() & 0xFF) != ref_eta0_link[fibre.index()])
                 {
@@ -315,14 +313,14 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                        << " Fibre read from data = " << (fibre.data() & 0xFF)
                                                        << " " << fibre; //screwed up
                 }
-	
+/*	
 	      if( (fibre.data() & 0xFF) == ref_eta0_link[fibre.index()])
 		{
 		    edm::LogInfo("GCT fibre NO data error" ) << "ETA0 Fibres match"
 							     << "Expected Fibre = " << ref_eta0_link[fibre.index()]
 	    						     <<" Fibre read from data = " << (fibre.data() & 0xFF)
 							     << " " << fibre;
-		}		
+		}		*/
             }
           else edm::LogInfo("GCT fibre data error") << "ETA0 Fibre index out of bounds " << fibre;
           //edm::LogInfo("Fibre Index Info") << "ETA0 Fibre index = " << fibre.index();

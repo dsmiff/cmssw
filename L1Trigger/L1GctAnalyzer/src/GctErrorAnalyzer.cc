@@ -28,6 +28,7 @@ Implementation:
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 //TFile maker include
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 //ROOT includes
@@ -296,6 +297,12 @@ GctErrorAnalyzer::GctErrorAnalyzer(const edm::ParameterSet& iConfig) :
   emuTag_( iConfig.getUntrackedParameter<edm::InputTag>("emuTag", edm::InputTag("gctEmuDigis")) ),
   useSys_( iConfig.getUntrackedParameter<std::string>("useSys","P5"))
 {
+
+  // Including consumes for input tags
+  
+  //consumes<L1CaloRegionCollection>(caloRegions); 
+  
+
   //now do what ever initialization is needed
   //make the root file
   edm::Service<TFileService> fs;

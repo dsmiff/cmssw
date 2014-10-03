@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('FibreAnalyser')
 
-process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3564 ) )
+process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 50 ) )
 
 #Input file
 process.source = cms.Source ( "EmptySource" )
@@ -29,7 +29,7 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
  #filename = cms.untracked.string ( "counter_2008_03_04.dat" )
  #filename = cms.untracked.string ( "logical_id_2008_03_04.dat" )
  #filename = cms.untracked.string ( "jet_counter_2008_05_14.dat" )
-    filename = cms.untracked.string ( "logical_id.txt" )
+    filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" )
     #GctFedId =  cms.untracked.int32( 745 ),
     #FileEventOffset = cms.untracked.int32( 0 ) 
 
@@ -50,7 +50,7 @@ process.l1GctHwDigis = cms.EDProducer( "GctRawToDigi",
   numberOfGctSamplesToUnpack = cms.uint32(1),
   numberOfRctSamplesToUnpack = cms.uint32(1),
   unpackSharedRegions  = cms.bool(False),  
-  unpackerVersion = cms.uint32(2)
+  unpackerVersion = cms.uint32(3)
 )
 
 

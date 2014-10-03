@@ -45,7 +45,8 @@ class GctFibreAnalyzer : public edm::EDAnalyzer {
   void CheckLogicalID(const L1GctFibreWord fibre);
   void CheckCounter(const L1GctFibreWord fibre);
 
-  edm::InputTag m_fibreSource;
+  //edm::InputTag m_fibreSource;
+  edm::EDGetToken m_fibreSource;
   bool m_doLogicalID;
   bool m_doCounter;
   unsigned int m_numZeroEvents;

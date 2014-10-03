@@ -19,8 +19,8 @@ process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3563 ) )
 
 # Message Logger
 process.MessageLogger = cms.Service("MessageLogger",
-	destinations = cms.untracked.vstring("PatternTest_single_e_DetailedInfo"),
-	PatternTest_single_e_DetailedInfo = cms.untracked.PSet( threshold = cms.untracked.string("DEBUG") ),
+	destinations = cms.untracked.vstring("PatternTestConfig_DetailedInfo"),
+	PatternTestConfig_DetailedInfo = cms.untracked.PSet( threshold = cms.untracked.string("DEBUG") ),
 	debugModules = cms.untracked.vstring("*")
 )
 
@@ -28,7 +28,7 @@ process.MessageLogger = cms.Service("MessageLogger",
 
 # Input captured ascii file
 process.gctRaw = cms.EDProducer( "TextToRaw",
-                                   filename = cms.untracked.string ( "single_e.txt" ),
+                                   filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" ),
                                    GctFedId = cms.untracked.int32 ( 745 )
                                    )
 
@@ -80,8 +80,8 @@ process.TFileService = cms.Service("TFileService",
 process.p = cms.Path(process.gctRaw*
                      process.l1GctHwDigis*
                      process.valGctDigis*
-                     process.l1compare*
-                     process.dumpGctDigis*
+                    # process.l1compare*
+                    # process.dumpGctDigis*
                      process.gctErrorAnalyzer)
 
 
