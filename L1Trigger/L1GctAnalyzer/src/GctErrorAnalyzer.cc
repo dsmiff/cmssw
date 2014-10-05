@@ -123,8 +123,34 @@ private:
   int EmuTrigBx_;
   int GCTTrigBx_;
   //the following flags contain the location of the hardware and emulator digis
-  edm::InputTag dataTag_;
-  edm::InputTag emuTag_;
+  //edm::InputTag dataTag_;
+  //edm::InputTag emuTag_;
+ //***** REPLACING InputTag with EDGetTokenT
+  edm::EDGetTokenT<L1CaloRegionCollection> dataTagRegCol_;
+  edm::EDGetTokenT<L1CaloEmCollection> dataTagEmCol_;
+  edm::EDGetTokenT<L1GctEmCandCollection> dataTagEmCCol_;
+  edm::EDGetTokenT<L1GctJetCandCollection> dataTagJets_;
+  edm::EDGetTokenT<L1GctHFRingEtSumsCollection> dataTagHFRingSum_;
+  edm::EDGetTokenT<L1GctHFBitCountsCollection> dataTagHFBits_;
+  edm::EDGetTokenT<L1GctEtTotalCollection> dataTagTotalEt_;
+  edm::EDGetTokenT<L1GctEtHadCollection> dataTagTotalHt_;
+  edm::EDGetTokenT<L1GctEtMissCollection> dataTagMET_;
+  edm::EDGetTokenT<L1GctHtMissCollection> dataTagMHT_;
+  edm::EDGetTokenT<L1GctInternHtMissCollection> dataTagMHTIntern_;
+
+  edm::EDGetTokenT<L1GctEmCandCollection> emuTagEmCCol_;
+  edm::EDGetTokenT<L1GctJetCandCollection> emuTagJets_; 
+  edm::EDGetTokenT<L1GctInternJetDataCollection> emuTagJetsIntern_; 
+  edm::EDGetTokenT<L1GctHFRingEtSumsCollection> emuTagHFRingSum_;
+  edm::EDGetTokenT<L1GctHFBitCountsCollection> emuTagHFBits_;
+  edm::EDGetTokenT<L1GctEtTotalCollection> emuTagTotalEt_;
+  edm::EDGetTokenT<L1GctEtHadCollection> emuTagTotalHt_;
+  edm::EDGetTokenT<L1GctEtMissCollection> emuTagMET_;
+  edm::EDGetTokenT<L1GctHtMissCollection> emuTagMHT_;
+//******** FINISH REPLACEMENT
+	
+
+
   //the following is a string which dictates whether or not we want to use the lab or full system parameters
   std::string useSys_;
 
@@ -293,15 +319,37 @@ GctErrorAnalyzer::GctErrorAnalyzer(const edm::ParameterSet& iConfig) :
   RCTTrigBx_( iConfig.getUntrackedParameter<int>("RCTTrigBx", 0)),
   EmuTrigBx_( iConfig.getUntrackedParameter<int>("EmuTrigBx", 0)),
   GCTTrigBx_( iConfig.getUntrackedParameter<int>("GCTTrigBx", 0)),
-  dataTag_( iConfig.getUntrackedParameter<edm::InputTag>("dataTag", edm::InputTag("gctDigis")) ),
-  emuTag_( iConfig.getUntrackedParameter<edm::InputTag>("emuTag", edm::InputTag("gctEmuDigis")) ),
+  
+  // REPLACING dataTag_ and emuTag_ WITH CONSUMES METHOD
+  //dataTag_( iConfig.getUntrackedParameter<edm::InputTag>("dataTag", edm::InputTag("gctDigis")) ),
+  //emuTag_( iConfig.getUntrackedParameter<edm::InputTag>("emuTag", edm::InputTag("gctEmuDigis")) ),
+  
   useSys_( iConfig.getUntrackedParameter<std::string>("useSys","P5"))
 {
-
-  // Including consumes for input tags
+  // INTRODUCE CONSUMES ACTION FOR INPUT TAGS
   
-  //consumes<L1CaloRegionCollection>(caloRegions); 
-  
+  dataTagRegCol_= consumes<L1CaloRegionCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis"))); 
+  dataTagEmCol_= consumes<L1CaloEmCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagEmCCol_ = consumes<L1GctEmCandCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagJets_ = consumes<L1GctJetCandCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis"))); 
+  dataTagHFRingSum_ = consumes<L1GctHFRingEtSumsCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagHFBits_ = consumes<L1GctHFBitCountsCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag", edm::InputTag("gctDigis")));
+  dataTagTotalEt_ = consumes<L1GctEtTotalCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagTotalHt_ = consumes<L1GctEtHadCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagMET_ = consumes<L1GctEtMissCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagMHT_ = consumes<L1GctHtMissCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+  dataTagMHTIntern_ = consumes<L1GctInternHtMissCollection>(iConfig.getUntrackedParameter<edm::InputTag>("dataTag",edm::InputTag("gctDigis")));
+	
+  emuTagEmCCol_ = consumes<L1GctEmCandCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagJets_ = consumes<L1GctJetCandCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagJetsIntern_ = consumes<L1GctInternJetDataCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagHFRingSum_ = consumes<L1GctHFRingEtSumsCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagHFBits_ = consumes<L1GctHFBitCountsCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagTotalEt_ = consumes<L1GctEtTotalCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagTotalHt_ = consumes<L1GctEtHadCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagMET_ = consumes<L1GctEtMissCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+  emuTagMHT_ = consumes<L1GctHtMissCollection>(iConfig.getUntrackedParameter<edm::InputTag>("emuTag",edm::InputTag("gctEmuDigis")));
+// FINISH INCLUDING CONSUMES ACTION
 
   //now do what ever initialization is needed
   //make the root file
@@ -633,7 +681,8 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   Handle<L1GctInternHtMissCollection> intHtMissD;
 
   //we need this for all user cases...
-  iEvent.getByLabel(dataTag_.label(), caloRegions);
+  //iEvent.getByLabel(dataTag_.label(), caloRegions);
+  iEvent.getByToken(dataTagRegCol_, caloRegions);    // REPLACING getByLabel -> getByToken
 
   //in order to allow the debug folders to have a unique name (so that when jobs are split in crab, we can merge) 
   //use the eventnum in the folder name
@@ -644,11 +693,16 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   }
 
   if(doEg_) {
-    iEvent.getByLabel(dataTag_.label(),"nonIsoEm", nonIsoEgD);
-    iEvent.getByLabel(emuTag_.label(), "nonIsoEm", nonIsoEgE);
+    //    iEvent.getByLabel(dataTag_.label(),"nonIsoEm", nonIsoEgD);
+    iEvent.getByToken(dataTagEmCCol_, nonIsoEgD);
+    iEvent.getByToken(emuTagEmCCol_, nonIsoEgE); 
+    //    iEvent.getByLabel(emuTag_.label(), "nonIsoEm", nonIsoEgE);
 
-    iEvent.getByLabel(dataTag_.label(), "isoEm", isoEgD);
-    iEvent.getByLabel(emuTag_.label(), "isoEm", isoEgE);
+    //    iEvent.getByLabel(dataTag_.label(), "isoEm", isoEgD);
+    iEvent.getByToken(dataTagEmCCol_, isoEgD);
+    iEvent.getByToken(emuTagEmCCol_, isoEgE);
+    //    iEvent.getByLabel(emuTag_.label(), "isoEm", isoEgE);
+ // REPLACING getByLabel -> getByToken
 
     isIsoError=0;
     isNonIsoError=0;
@@ -666,22 +720,31 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     }
 
     if( (isIsoError && doIsoDebug_) || (isNonIsoError && doNonIsoDebug_) ) {
-      iEvent.getByLabel(dataTag_.label(), emRegions);
+      //   iEvent.getByLabel(dataTag_.label(), emRegions);
+        iEvent.getByToken(dataTagEmCol_, emRegions);     // REPLACING getByLabel -> getByToken
       if(checkCollections(emRegions, RCT_EM_OBJECT_QUANTA, "RCT EMRegions")) plotEGErrors(isoEgD, isoEgE, nonIsoEgD, nonIsoEgE, emRegions);
     } 
   }
 
   if(doJets_) {
-    iEvent.getByLabel(emuTag_.label(), "cenJets", cenJetsE);
-    iEvent.getByLabel(dataTag_.label(), "cenJets", cenJetsD);
+    //iEvent.getByLabel(emuTag_.label(), "cenJets", cenJetsE);
+    //iEvent.getByLabel(dataTag_.label(), "cenJets", cenJetsD);
+    iEvent.getByToken(dataTagJets_,cenJetsD);
+    iEvent.getByToken(emuTagJets_, cenJetsE);
 
-    iEvent.getByLabel(emuTag_.label(), "forJets", forJetsE);
-    iEvent.getByLabel(dataTag_.label(), "forJets", forJetsD);
+    //iEvent.getByLabel(emuTag_.label(), "forJets", forJetsE);
+    //iEvent.getByLabel(dataTag_.label(), "forJets", forJetsD);
+    iEvent.getByToken(dataTagJets_, forJetsD);
+    iEvent.getByToken(emuTagJets_, forJetsE);
 
-    iEvent.getByLabel(emuTag_.label(), "tauJets", tauJetsE);
-    iEvent.getByLabel(dataTag_.label(), "tauJets", tauJetsD);
 
-    iEvent.getByLabel(emuTag_.label(), intJetsE); 
+    //iEvent.getByLabel(emuTag_.label(), "tauJets", tauJetsE);
+    //iEvent.getByLabel(dataTag_.label(), "tauJets", tauJetsD);
+    iEvent.getByToken(dataTagJets_, tauJetsD);
+    iEvent.getByToken(emuTagJets_, tauJetsE);
+
+    iEvent.getByToken(emuTagJetsIntern_, intJetsE); 
+   // REPLACING getByLabel -> getByToken
 
     isCenJetError=0;
     isTauJetError=0;
@@ -717,12 +780,17 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   }
 
   if(doHF_) {
-    iEvent.getByLabel(dataTag_.label(), hfRingSumsD);
-    iEvent.getByLabel(emuTag_.label(), hfRingSumsE);
+    //iEvent.getByLabel(dataTag_.label(), hfRingSumsD);
+    iEvent.getByToken(dataTagHFRingSum_, hfRingSumsD);   
+    iEvent.getByToken(emuTagHFRingSum_, hfRingSumsE);
+    //iEvent.getByLabel(emuTag_.label(), hfRingSumsE);
 
-    iEvent.getByLabel(dataTag_.label(), hfBitCountsD);
-    iEvent.getByLabel(emuTag_.label(), hfBitCountsE);
-    
+    //iEvent.getByLabel(dataTag_.label(), hfBitCountsD);
+    iEvent.getByToken(dataTagHFBits_, hfBitCountsD);
+    iEvent.getByToken(emuTagHFBits_, hfBitCountsE);   
+    //iEvent.getByLabel(emuTag_.label(), hfBitCountsE);
+// REPLACING getByLabel -> getByToken    
+
     isRingSumError=0;
     isBitCountError=0;
     
@@ -744,11 +812,16 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   }
 
   if(doTotalEnergySums_) {
-    iEvent.getByLabel(dataTag_.label(), totalEtD);
-    iEvent.getByLabel(emuTag_.label(), totalEtE);
+    //iEvent.getByLabel(dataTag_.label(), totalEtD);
+    iEvent.getByToken(dataTagTotalEt_, totalEtD);
+    iEvent.getByToken(emuTagTotalEt_, totalEtE); 
+    //iEvent.getByLabel(emuTag_.label(), totalEtE);
 
-    iEvent.getByLabel(dataTag_.label(), totalHtD);
-    iEvent.getByLabel(emuTag_.label(), totalHtE);
+    //iEvent.getByLabel(dataTag_.label(), totalHtD);
+    iEvent.getByToken(dataTagTotalHt_, totalHtD);
+    iEvent.getByToken(emuTagTotalHt_, totalHtE);
+    //iEvent.getByLabel(emuTag_.label(), totalHtE);
+// REPLACING getByLabel -> getByToken
 
     isTotalEError=0;
     isTotalHError=0;
@@ -773,12 +846,17 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   if(doMissingEnergySums_) {
 
-    iEvent.getByLabel(dataTag_.label(), missingEtD);
-    iEvent.getByLabel(emuTag_.label(), missingEtE);
+    //iEvent.getByLabel(dataTag_.label(), missingEtD);
+    iEvent.getByToken(dataTagMET_, missingEtD);
+    iEvent.getByToken(emuTagMET_, missingEtE);
+    //iEvent.getByLabel(emuTag_.label(), missingEtE);
 
-    iEvent.getByLabel(dataTag_.label(), missingHtD);
-    iEvent.getByLabel(emuTag_.label(), missingHtE);
-    
+    //iEvent.getByLabel(dataTag_.label(), missingHtD);
+    iEvent.getByToken(dataTagMHT_, missingHtD);    
+    iEvent.getByToken(emuTagMHT_, missingHtE);
+    //iEvent.getByLabel(emuTag_.label(), missingHtE);
+// REPLACING getByLabel -> getByToken    
+
     isMissingEError=0;
     isMissingHError=0;
     
@@ -795,7 +873,8 @@ GctErrorAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
       //added 19/03/2010 for intermediate information on MissingHt quantities in the data
       if(doExtraMissingHTDebug_) {
-	iEvent.getByLabel(dataTag_.label(), "", intHtMissD);
+	//iEvent.getByLabel(dataTag_.label(), "", intHtMissD);    // REPLACING getByLabel -> getByToken
+	iEvent.getByToken(dataTagMHTIntern_ , intHtMissD);
 	if(checkCollections(intHtMissD, GCT_INT_HTMISS_QUANTA, "Internal Missing Ht Data")) {
 	  for(unsigned int i=0; i<intHtMissD->size(); i++) {
 	    if(doGCTMBx_ || intHtMissD->at(i).bx() == GCTTrigBx_) {
