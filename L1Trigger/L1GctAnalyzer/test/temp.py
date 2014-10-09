@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('FibreAnalyser')
 
-process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 50 ) )
+process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3564 ) )
 
 #Input file
 process.source = cms.Source ( "EmptySource" )
@@ -16,10 +16,10 @@ process.output = cms.OutputModule(
 
 #Logger
 process.MessageLogger = cms.Service ("MessageLogger",
-    destinations = cms.untracked.vstring ( "detailedInfo" ),
-    detailedInfo = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
+    destinations = cms.untracked.vstring ( "detailedInfo_2014_10_08_17h09m45s_v38_TestRun" ),
+    detailedInfo_2014_10_08_17h09m45s_v38_TestRun = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
 #    debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
-        debugModules = cms.untracked.vstring ( "*" ),
+        debugModules = cms.untracked.vstring ( "*" )
 #    #suppressWarning = cms.untracked.vstring ( "source", "l1GctHwDigis" )
 
 )
@@ -29,8 +29,14 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
  #filename = cms.untracked.string ( "counter_2008_03_04.dat" )
  #filename = cms.untracked.string ( "logical_id_2008_03_04.dat" )
  #filename = cms.untracked.string ( "jet_counter_2008_05_14.dat" )
-    filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" )
-    #GctFedId =  cms.untracked.int32( 745 ),
+    #filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" )
+ filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h09m45s_copy.txt")
+ #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h55m37s.txt") 
+#filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h09m45s_copy.txt")  
+ #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__18h07m10s_copy_hacked.txt")  
+ #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h55m37s.txt")  
+
+#GctFedId =  cms.untracked.int32( 745 ),
     #FileEventOffset = cms.untracked.int32( 0 ) 
 
 )
@@ -50,7 +56,7 @@ process.l1GctHwDigis = cms.EDProducer( "GctRawToDigi",
   numberOfGctSamplesToUnpack = cms.uint32(1),
   numberOfRctSamplesToUnpack = cms.uint32(1),
   unpackSharedRegions  = cms.bool(False),  
-  unpackerVersion = cms.uint32(3)
+  unpackerVersion = cms.uint32(38)
 )
 
 
@@ -68,4 +74,4 @@ process.out = cms.EndPath(
     process.output
 )
 
-process.path = cms.Path ( process.gctRaw + process.l1GctHwDigis + process.FibreAnalysis )
+process.path = cms.Path ( process.gctRaw*process.l1GctHwDigis*process.FibreAnalysis )

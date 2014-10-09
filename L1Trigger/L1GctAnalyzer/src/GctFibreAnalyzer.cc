@@ -27,7 +27,7 @@ Description: Analyzer individual fibre channels from the source card.
 #include "DataFormats/L1GlobalCaloTrigger/interface/L1GctCollections.h"
 
 GctFibreAnalyzer::GctFibreAnalyzer(const edm::ParameterSet& iConfig):
-//  m_fibreSource(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource")),
+  //m_fibreSource(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource")),
  //m_fibreSource = comsumes<L1GctFibreCollection>(iConfig.getUntrackedParameter<edm::InputTag>("FibreSource"))
   m_doLogicalID(iConfig.getUntrackedParameter<bool>("doLogicalID")),
   m_doCounter(iConfig.getUntrackedParameter<bool>("doCounter")),
@@ -48,7 +48,7 @@ GctFibreAnalyzer::~GctFibreAnalyzer()
   edm::LogInfo("Inconsistent Payload events") << "Total number of events with inconsistent payloads: " << m_numInconsistentPayloadEvents;
   		
   if(m_doCounter){edm::LogInfo("Successful events") << "Total number of Successful events: " << m_numConsistentEvents;
-	std::cout << "Total number of Successful events: " << m_numConsistentEvents << std::endl;
+//	std::cout << "Total number of Successful events: " << m_numConsistentEvents << std::endl;
 	}
 }
 
@@ -70,21 +70,22 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   unsigned int flag_for_consistency = 0;
   int flag_for_consistent_events = 0;
 
-	//std::cout << "fibre size: " << fibre->size() << std::endl;
-	//std::cout << "fibre end: " << fibre->begin() << std::endl;
-	//cout << "L1GctFibreCollection is of the type: " << typeid(L1GctFibreCollection).name() << endl;		
-
+	//cout << "iEvent: " << *iEvent << endl;/
+		
 	if(fibre->size() == 0){edm::LogInfo("Fibre size error") << "Fibre size is 0";}
 	//else{edm::LogInfo("Fibre size non-zero") << "Fibre size NOT 0"; }
 
+int nofibres=0;
 
   for (L1GctFibreCollection::const_iterator f=fibre->begin(); f!=fibre->end(); f++){
 
-
-	cout << "START ANALYSIS" << endl;	
-
-    if (f->data()!=0)
+	nofibres++;
+	//cout << "START ANALYSIS: " << fibre->data() << " : " << nofibres << endl;
+ 
+ 
+   if (f->data()!=0)
       {
+	////cout << "Beginning loop" << endl;
         if(m_doCounter) 
           {
             if(f==fibre->begin()) {flag_for_consistency = f->data();}
@@ -96,7 +97,7 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
           edm::LogInfo("GCT fibre data error") << "Missing phase bit (clock) in fibre data " << (*f);
 	std::cout << "GCT fibre data error: Missing phase bit (clock) in fibre data" << std::endl;
         }
-//	else{edm::LogInfo("GCT fibre NO data error") << "NO GCT fibre data error " << (*f);}
+	//else{edm::LogInfo("GCT fibre NO data error") << "NO GCT fibre data error " << (*f);}
     
         // Check for BC0
         if (CheckForBC0(*f) && (f==fibre->begin())) {
@@ -112,6 +113,7 @@ void GctFibreAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
         // Check logical ID pattern
         if (m_doLogicalID) CheckLogicalID(*f);
+
 
         // Check counter pattern
         if (m_doCounter) CheckCounter(*f);
@@ -161,6 +163,9 @@ void GctFibreAnalyzer::CheckCounter(const L1GctFibreWord fibre)
   cycle0Data = fibre.data() & 0x7FFF;
   cycle1Data = (fibre.data() >> 16) & 0x7FFF;
 
+//std::cout << "cycl0Data: " << cylce0Data << std::endl;
+
+
   // Check to see if fibre numbers are consistent
   if ((cycle0Data+1)!=cycle1Data){
     edm::LogInfo("GCT fibre data error") << "Fibre data not incrementing in cycles 0 and 1 "
@@ -194,6 +199,14 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
 
   int eta_region, rct_phi_region, leaf_phi_region, jf_type, elec_type, local_source_card_id, source_card_id_read, source_card_id_expected;
 
+	//std::cout << "Fibre.Block(): " << fibre.block() << std::endl;
+	//std::cout << "Fibre.Data(): " << fibre.data() << std::endl;
+	//std::cout << "Fibre.Index(): " << fibre.index() << std::endl;
+
+if(fibre.data() == 0xdeadbeef){ std::cout << "HELO HELLO HELLO" << std::endl;  // Sanity check 
+				 edm::LogInfo("DEADBEEF") << "DEADBEEF";	
+				edm::LogInfo("Fibre Data") << "fibre.data(): " << fibre.data();
+}
   // Check that data in cycle 0 and cycle 1 are equal
   if ((fibre.data()&0x7FFF)!=((fibre.data()&0x7FFF0000)>>16)){
     edm::LogInfo("GCT fibre data error") << "Fibre data different on cycles 0 and 1 " << fibre;
@@ -204,18 +217,26 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
 
   if((fibre.block() >> 10) & 0x1 ) 
     {
+      //throw cms::Exception("Entering must loop 1") << fibre.block();
+      //edm::LogInfo("Entering must loop 1") << "Entering must loop 1" << fibre.block();
       eta_region = 0;		//negative eta region 		
       ref_jf_link[2] = 1; //modify indices to represent neg_eta fibre mapping
       ref_jf_link[3] = 2;	
     } 	
-  else eta_region = 1;	//positive eta region 
+  else { eta_region = 1; }	//positive eta region 
+   
+  //throw cms::Exception("Entering must loop 2") << fibre.block();
 
   if(((fibre.block() >> 8) & 0x7) == 0 || ((fibre.block() >> 8) & 0x7) == 4)	//i.e. electron leaf cards
     {
-	
-      if((fibre.block() & 0xFF)==0x04)		elec_type=1;
-      else if((fibre.block() & 0xFF)==0x84)	elec_type=0;
-      else throw cms::Exception("Unknown GCT fibre data block ") << fibre.block(); //else something screwed up   
+    //  throw cms::Exception("Entering must loop 3") << fibre.block();
+       //edm::LogInfo("Entering must loop 2") << "Entering loop 2 : " << fibre.block();	
+	//std::cout << "Entering Electron fibre block Loop" << std::endl;
+      if((fibre.block() & 0xFF)==0x04)	{	elec_type=1;   }
+      else if((fibre.block() & 0xFF)==0x84){	elec_type=0;   }
+      else { throw cms::Exception("Unknown GCT fibre data block ") << fibre.block(); //else something screwed up  
+ 	edm::LogInfo("UNKNOWN GCT FIBRE DATA BLOCK") << "Unkown GCT fibre data block" << fibre.block(); 		
+	} 
 	
       rct_phi_region = (fibre.index() / 3) + (4*elec_type);
 
@@ -232,7 +253,7 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                << " ID read from data = " << source_card_id_read
                                                << " " << fibre; //screwed up
         }
-
+	
       if( (fibre.data() & 0xFF) != (unsigned int)(2 + fibre.index()%3))
         {
           edm::LogInfo("GCT fibre data error") << "Electron Fibres do not match "  
@@ -241,10 +262,11 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                << " " << fibre; //screwed up
         }
 
-
-    }
+edm::LogInfo("Finsished electron leaf card") << "Finsihed electron leaf card analysis";
+	}
   else	//i.e. jet leaf cards
     {
+//	std::cout << "Entering jet leaf card analysis" << std::endl;
       //the reason we use these values for eta_region is so it is easy to add 4 to the local source card ID
       //remember that 0x9.. 0xA.. and 0xB.. are +ve eta block headers
       //whereas 0xD.., 0xE.. and 0xF.. are -ve eta
@@ -296,16 +318,6 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                        << " " << fibre; //screwed up
                 }
 
-	     // Added by Dom
-	     /* if(source_card_id_expected == source_card_id_read)
-	 	{
-		  edm::LogInfo("GCT fibre NO data error") << "ETA0 Source Cards IDs match"
-							  << "Expected ID = " << source_card_id_expected
-							  << " ID read from data = " << source_card_id_read
-						          << " " << fibre;
-		}		
-*/
-
               if( (fibre.data() & 0xFF) != ref_eta0_link[fibre.index()])
                 {
                   edm::LogInfo("GCT fibre data error") << "ETA0 Fibres do not match "  
@@ -313,14 +325,7 @@ void GctFibreAnalyzer::CheckLogicalID(const L1GctFibreWord fibre)
                                                        << " Fibre read from data = " << (fibre.data() & 0xFF)
                                                        << " " << fibre; //screwed up
                 }
-/*	
-	      if( (fibre.data() & 0xFF) == ref_eta0_link[fibre.index()])
-		{
-		    edm::LogInfo("GCT fibre NO data error" ) << "ETA0 Fibres match"
-							     << "Expected Fibre = " << ref_eta0_link[fibre.index()]
-	    						     <<" Fibre read from data = " << (fibre.data() & 0xFF)
-							     << " " << fibre;
-		}		*/
+	
             }
           else edm::LogInfo("GCT fibre data error") << "ETA0 Fibre index out of bounds " << fibre;
           //edm::LogInfo("Fibre Index Info") << "ETA0 Fibre index = " << fibre.index();
