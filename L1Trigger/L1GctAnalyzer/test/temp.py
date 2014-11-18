@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('FibreAnalyser')
 
-process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 1 ) )
+process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 10 ) )
 
 #Input file
 process.source = cms.Source ( "EmptySource" )
@@ -16,8 +16,8 @@ process.output = cms.OutputModule(
 
 #Logger
 process.MessageLogger = cms.Service ("MessageLogger",
-    destinations = cms.untracked.vstring ( "detailedInfo_2014_10_27__16h53m46s_1event"),
-    detailedInfo_2014_10_27__16h53m46s_1event = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
+    destinations = cms.untracked.vstring ( "detailedInfo_2014_10_27__TEST_1event"),
+    detailedInfo_2014_10_27__TEST_1event = cms.untracked.PSet ( threshold = cms.untracked.string("INFO") ),
 #    debugModules = cms.untracked.vstring ( "l1GctHwDigis", "FibreAnalysis" ),
         debugModules = cms.untracked.vstring ( "*" )
 #    #suppressWarning = cms.untracked.vstring ( "source", "l1GctHwDigis" )
@@ -35,7 +35,8 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
  #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h09m45s_copy.txt")  
  #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__18h07m10s_copy_hacked.txt")  
  #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h55m37s.txt")  
- filename = cms.untracked.string( "patternCapture_ts__2014_10_27__16h53m46s.txt" )
+ #filename = cms.untracked.string( "patternCapture_ts__2014_10_27__16h53m46s.txt" )
+ filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h09m45s.txt")
 #GctFedId =  cms.untracked.int32( 745 ),
     #FileEventOffset = cms.untracked.int32( 0 ) 
 

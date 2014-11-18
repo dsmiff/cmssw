@@ -80,9 +80,10 @@ int nofibres=0;
   for (L1GctFibreCollection::const_iterator f=fibre->begin(); f!=fibre->end(); f++){
 
 	nofibres++;
-	cout << "START ANALYSIS: " << fibre->data() << " : " << nofibres << endl;
- 
- 
+	cout << "START ANALYSIS: " << "fibre.data() :"<< fibre->data() << " : " << nofibres << endl;
+	
+	
+
    if (f->data()!=0)
       {
 	////cout << "Beginning loop" << endl;
