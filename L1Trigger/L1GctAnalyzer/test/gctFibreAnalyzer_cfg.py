@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('FibreAnalyser')
 
-process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 10 ) )
+process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 1 ) )
 
 #Input file
 process.source = cms.Source ( "EmptySource" )
@@ -40,8 +40,12 @@ process.MessageLogger.cerr.ERROR = cms.untracked.PSet( limit = cms.untracked.int
 process.gctRaw = cms.EDProducer( "TextToRaw",
  #Only select one of these at a time
  #filename = cms.untracked.string( "patternCapture_ts__2014_10_08__17h55m37s.txt")  
- filename = cms.untracked.string( "patternCapture_ts__2014_11_14__16h19m56s.txt" )
-#GctFedId =  cms.untracked.int32( 745 ),
+ #filename = cms.untracked.string( "patternCapture_ts__2014_11_14__16h19m56s.txt" )
+ #filename = cms.untracked.string( "patternCapture_ts__2014_11_18__15h57m09s.txt" )
+ #filename = cms.untracked.string( "patternCapture_ts__2014_11_18__16h38m24s.txt" )
+ #filename  = cms.untracked.string( "patternCapture_ts__2014_11_18__17h05m32s.txt" )
+ filename = cms.untracked.string( "patternCapture_ts__2014_11_19__14h54m28s.txt" )
+ #GctFedId =  cms.untracked.int32( 745 ),
     #FileEventOffset = cms.untracked.int32( 0 ) 
 )
 
@@ -72,6 +76,7 @@ process.FibreAnalysis = cms.EDAnalyzer( "GctFibreAnalyzer",
   #Make sure only one of these are set to True
   doLogicalID = cms.untracked.bool(True),
   doCounter = cms.untracked.bool(False)
+  #doLogicalIDJets = cms.untracked.bool(True)
 )
 
 # Path and EndPath definitions
