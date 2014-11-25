@@ -31,11 +31,11 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
                                    #filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" ),
 				   #filename = cms.untracked.string ( "patternCapture_ts__2014_11_20__18h43m21s.txt" ),
                                    #filename = cms.untracked.string ( "patternCapture_ts__single_e_50events.txt" ),
-				   #filename = cms.untracked.string ( "patternCapture_ts__single_e_3564events.txt" ),
-				   #filename = cms.untracked.string ( "patternCapture_ts__higgs_4e_50events.txt:" ),
+				   filename = cms.untracked.string ( "patternCapture_ts__single_e_3564events.txt" ),
+				   #filename = cms.untracked.string ( "patternCapture_ts__higgs_4e_50events.txt" ),
 				   #filename = cms.untracked.string ( "patternCapture_ts__higgs_4e_3564events.txt" ),
 				   #filename = cms.untracked.string ( "patternCapture_ts__susy_50events.txt" ),
-                                   filename = cms.untracked.string ( "patternCapture_ts__susy_3564events.txt" ),
+                                   #filename = cms.untracked.string ( "patternCapture_ts__susy_3564events.txt" ),
 				   GctFedId = cms.untracked.int32 ( 745 )
                                    )
 
