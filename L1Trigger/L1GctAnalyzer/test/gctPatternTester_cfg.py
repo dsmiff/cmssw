@@ -7,20 +7,36 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('GctPatternTester')
 
-process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger.cout.placeholder = cms.untracked.bool(False)
-process.MessageLogger.cout.threshold = cms.untracked.string('DEBUG')
-process.MessageLogger.debugModules = cms.untracked.vstring('*')
+process.load('FWCore.MessageService.MessageLogger_cfi')
+process.MessageLogger.destinations.append('detailedInfoPatternTest')
+process.MessageLogger.debugModules = ['*']
+process.MessageLogger.detailedInfoPatternTest = cms.untracked.PSet (
+	threshold = cms.untracked.string('INFO')
+	)
+
+process.MessageLogger.cerr.threshold = 'DEBUG'
+process.MessageLogger.cerr.DEBUG = cms.untracked.PSet( limit = cms.untracked.int32(-1) )
+process.MessageLogger.cerr.INFO = cms.untracked.PSet( limit = cms.untracked.int32(-1) )
+process.MessageLogger.cerr.WARNING = cms.untracked.PSet( limit = cms.untracked.int32(-1) )
+process.MessageLogger.cerr.ERROR = cms.untracked.PSet( limit = cms.untracked.int32(-1) )
+
 
 process.source = cms.Source ( "EmptySource" )
 
 # One orbit of data is default for capture 
-process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3563 ) )
+process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 3564 ) )
 
 # Input captured ascii file
 process.gctRaw = cms.EDProducer( "TextToRaw",
-                                   filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" ),
-                                   GctFedId = cms.untracked.int32 ( 745 )
+                                   #filename = cms.untracked.string ( "patternCaptureOrbit_hwtest__2011_02_18__10h01m55s_HfInc.txt" ),
+				   #filename = cms.untracked.string ( "patternCapture_ts__2014_11_20__18h43m21s.txt" ),
+                                   #filename = cms.untracked.string ( "patternCapture_ts__single_e_50events.txt" ),
+				   #filename = cms.untracked.string ( "patternCapture_ts__single_e_3564events.txt" ),
+				   #filename = cms.untracked.string ( "patternCapture_ts__higgs_4e_50events.txt:" ),
+				   #filename = cms.untracked.string ( "patternCapture_ts__higgs_4e_3564events.txt" ),
+				   #filename = cms.untracked.string ( "patternCapture_ts__susy_50events.txt" ),
+                                   filename = cms.untracked.string ( "patternCapture_ts__susy_3564events.txt" ),
+				   GctFedId = cms.untracked.int32 ( 745 )
                                    )
 
 # Settings for pattern test (corresponds to V38_FS_Int11_Tau2_AllPipes_VME key)
