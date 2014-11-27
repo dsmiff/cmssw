@@ -4,8 +4,9 @@ void gctAnalyzerBasicPlotter()
   setStyle();
 
   // Open the file
-  TFile *data = new TFile("raw_gctAnalyzer.root");
-  
+  //TFile *data = new TFile("raw_gctAnalyzer.root");
+  TFile *data = new TFile("gctErrorAnalyzer_single_e_3564events.root");  
+
   // Canvas
   TCanvas *c1 = new TCanvas("c1","c1",800,800);
 

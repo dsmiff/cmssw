@@ -3,12 +3,12 @@
   gROOT->Reset();
   gStyle->SetOptStat(0);
 
-  TString rootname = "gctErrorAnalyzer_single_e_50events.root";
+  //TString rootname = "gctErrorAnalyzer_single_e_50events.root";
   //TString rootname = "gctErrorAnalyzer_single_e_3564events.root";
   //TString rootname = "gctErrorAnalyzer_higgs_4e_50events.root";
   //TString rootname = "gctErrorAnalyzer_higgs_4e_3564events.root";
-  //TString rootname = "gctErrorAnalyzer_susys_50events.root";
-  //TString rootname = "gctErrorAnalyzer_susys_3564events.root";
+  //TString rootname = "gctErrorAnalyzer_susy_50events.root";
+  TString rootname = "gctErrorAnalyzer_susy_3564events.root";
 
   TFile *rootfile = new TFile(rootname);
 
