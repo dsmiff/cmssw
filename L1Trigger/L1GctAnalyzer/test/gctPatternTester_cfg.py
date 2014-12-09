@@ -7,6 +7,9 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('GctPatternTester')
 
+process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
+process.GlobalTag.globaltag = 'GR_P_V49::All'
+
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.MessageLogger.destinations.append('detailedInfoPatternTest')
 process.MessageLogger.debugModules = ['*']
@@ -41,7 +44,7 @@ process.gctRaw = cms.EDProducer( "TextToRaw",
                                    )
 
 # Settings for pattern test (corresponds to V38_FS_Int11_Tau2_AllPipes_VME key)
-process.load('L1Trigger.L1GctAnalyzer.gctPatternTestConfig_cff')
+#process.load('L1Trigger.L1GctAnalyzer.gctPatternTestConfig_cff')
 
 # GCT emulator
 import L1Trigger.GlobalCaloTrigger.gctDigis_cfi
