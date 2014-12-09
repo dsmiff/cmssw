@@ -58,6 +58,7 @@ process.valGctDigis.useImprovedTauAlgorithm = cms.bool(True)
 # GCT unpacker
 process.load('EventFilter.GctRawToDigi.l1GctHwDigis_cfi')
 process.l1GctHwDigis.inputLabel = cms.InputTag( "gctRaw" )
+process.l1GctHwDigis.verbose = cms.untracked.bool( True )
 
 # L1Comparator
 process.load('L1Trigger.HardwareValidation.L1Comparator_cfi')
@@ -88,13 +89,14 @@ process.TFileService = cms.Service("TFileService",
    fileName = cms.string( 'gctErrorAnalyzer.root' )
 )
 
-process.p = cms.Path(process.gctRaw*
-                     process.l1GctHwDigis*
-                     process.valGctDigis*
-                     process.l1compare*
-                     process.dumpGctDigis*
-                     process.gctErrorAnalyzer)
+#process.p = cms.Path(process.gctRaw*
+#                     process.l1GctHwDigis*
+#                     process.valGctDigis*
+#                     process.l1compare*
+#                     process.dumpGctDigis*
+#                     process.gctErrorAnalyzer)
 
+process.p = cms.Path(process.gctRaw*process.l1GctHwDigis)
 
 process.output = cms.OutputModule( "PoolOutputModule",
                                    outputCommands = cms.untracked.vstring (
