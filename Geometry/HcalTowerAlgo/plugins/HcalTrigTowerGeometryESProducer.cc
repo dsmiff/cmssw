@@ -6,6 +6,7 @@
 
 HcalTrigTowerGeometryESProducer::HcalTrigTowerGeometryESProducer( const edm::ParameterSet & config )
 {
+  useFullGranularityHF_=config.getParameter<bool>("useFullGranularityHF");
   setWhatProduced( this );
 }
 
