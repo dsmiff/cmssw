@@ -309,7 +309,7 @@ void HcalTriggerPrimitiveAlgo::analyze(IntegerCaloSamples & samples, HcalTrigger
          if (samples[idx] >= 0x3FF)
             output[ibin] = 0x3FF;
       }
-      outcoder_->compress(output, finegrain, result);
+      outcoder_->compress(output, finegrain, result, *theTrigTowerGeometry);
    }
 }
 
@@ -350,7 +350,7 @@ void HcalTriggerPrimitiveAlgo::analyzeHF(IntegerCaloSamples & samples, HcalTrigg
       static const int MAX_OUTPUT = 0x3FF;  // 0x3FF = 1023
       if (output[ibin] > MAX_OUTPUT) output[ibin] = MAX_OUTPUT;
    }
-   outcoder_->compress(output, finegrain, result);
+   outcoder_->compress(output, finegrain, result, *theTrigTowerGeometry);
 }
 
 void HcalTriggerPrimitiveAlgo::analyzeHFV1(
@@ -404,7 +404,7 @@ void HcalTriggerPrimitiveAlgo::analyzeHFV1(
             finegrain[ibin] = HCALFEM->fineGrainbit(ADCShort, HF_DETAILS->ShortDigi.id(), HF_DETAILS->ShortDigi[ibin].capid(), ADCLong, HF_DETAILS->LongDigi.id(), HF_DETAILS->LongDigi[ibin].capid());
         }
     }
-    outcoder_->compress(output, finegrain, result);
+    outcoder_->compress(output, finegrain, result, *theTrigTowerGeometry);
     
 }
 

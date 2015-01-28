@@ -1,11 +1,13 @@
 #ifndef CALOTPGTRANSCODERULUT_H
 #define CALOTPGTRANSCODERULUT_H 1
 
+#include <memory>
 #include <vector>
 #include "CalibFormats/CaloTPG/interface/CaloTPGTranscoder.h"
+#include "Geometry/CaloTopology/interface/HcalTopology.h"
+
 
 // tmp
-#include "FWCore/Framework/interface/ESHandle.h"
 #include "CondFormats/HcalObjects/interface/HcalLutMetadata.h"
 
 
@@ -21,7 +23,7 @@ public:
   CaloTPGTranscoderULUT(const std::string& compressionFile="",
                         const std::string& decompressionFile="");
   virtual ~CaloTPGTranscoderULUT();
-  virtual HcalTriggerPrimitiveSample hcalCompress(const HcalTrigTowerDetId& id, unsigned int sample, bool fineGrain) const;
+  virtual HcalTriggerPrimitiveSample hcalCompress(const HcalTrigTowerDetId& id, unsigned int sample, bool fineGrain, HcalTrigTowerGeometry const&) const;
   virtual EcalTriggerPrimitiveSample ecalCompress(const EcalTrigTowerDetId& id, unsigned int sample, bool fineGrain) const;
 
   virtual void rctEGammaUncompress(const HcalTrigTowerDetId& hid, const HcalTriggerPrimitiveSample& hc,
@@ -30,10 +32,10 @@ public:
   virtual void rctJetUncompress(const HcalTrigTowerDetId& hid, const HcalTriggerPrimitiveSample& hc,
 				   const EcalTrigTowerDetId& eid, const EcalTriggerPrimitiveSample& ec,
 				   unsigned int& et) const;
-  virtual double hcaletValue(const HcalTrigTowerDetId& hid, const HcalTriggerPrimitiveSample& hc) const;
-  virtual std::vector<unsigned char> getCompressionLUT(HcalTrigTowerDetId id) const;
-  virtual void setup(const edm::EventSetup& es, Mode) const;
-  void printDecompression() const;
+  virtual double hcaletValue(const HcalTrigTowerDetId& hid, const HcalTriggerPrimitiveSample& hc, HcalTrigTowerGeometry const&) const;
+  virtual std::vector<unsigned char> getCompressionLUT(HcalTrigTowerDetId id, HcalTopology const&) const;
+  virtual void setup(HcalLutMetadata const&, HcalTrigTowerGeometry const&);
+  //virtual int getOutputLUTId(const int ieta, const int iphi) const;
 
  private:
   // Typedef
@@ -51,17 +53,16 @@ public:
   static const int TPGMAX = 256;
 
   // Member functions
-  void loadHCALCompress(void) const; //Analytical compression tables
-  void loadHCALCompress(const std::string& filename) const; //Compression tables from file
-  void loadHCALUncompress(void) const; //Analytical decompression
-  void loadHCALUncompress(const std::string& filename) const; //Decompression tables from file
+  void loadHCALCompress(HcalLutMetadata const&, HcalTrigTowerGeometry const&) ; //Analytical compression tables
+  void loadHCALCompress(const std::string& filename, HcalLutMetadata const&, HcalTrigTowerGeometry const&) ; //Compression tables from file
+  void loadHCALUncompress(HcalLutMetadata const&, HcalTrigTowerGeometry const&) ; //Analytical decompression
+  void loadHCALUncompress(const std::string& filename, HcalLutMetadata const&, HcalTrigTowerGeometry const&) ; //Decompression tables from file
   //int getLutGranularity(const DetId& id) const;
   //int getLutThreshold(const DetId& id) const;
 
   // Member Variables
-  mutable bool isLoaded_;
-  mutable double nominal_gain_;
-  mutable double rctlsb_factor_;
+  double nominal_gain_;
+  double rctlsb_factor_;
   std::string compressionFile_;
   std::string decompressionFile_;
   std::vector<int> ietal;
@@ -69,9 +70,7 @@ public:
   std::vector<int> ZS;
   std::vector<int> LUTfactor;
 
-  mutable LUT *outputLUT_[NOUTLUTS];
-  mutable std::vector<RCTdecompression> hcaluncomp_;
-  mutable edm::ESHandle<HcalLutMetadata> lutMetadata_;
-  mutable edm::ESHandle<HcalTrigTowerGeometry> theTrigTowerGeometry;
+  LUT *outputLUT_[NOUTLUTS];
+  std::vector<RCTdecompression> hcaluncomp_;
 };
 #endif

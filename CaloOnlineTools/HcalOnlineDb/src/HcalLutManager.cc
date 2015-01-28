@@ -834,7 +834,7 @@ std::map<int, boost::shared_ptr<LutXml> > HcalLutManager::getCompressionLutXmlFr
       //HcalTrigTowerDetId _detid(row->rawId);
       HcalTrigTowerDetId _detid(row->ieta, row->iphi);
       
-      std::vector<unsigned char> coder_lut = _coder.getCompressionLUT(_detid);
+      std::vector<unsigned char> coder_lut = _coder.getCompressionLUT(_detid, *topo_);
       for (std::vector<unsigned char>::const_iterator _i=coder_lut.begin(); _i!=coder_lut.end();_i++){
 	unsigned int _temp = (unsigned int)(*_i);
 	//if (_temp!=0) std::cout << "DEBUG non-zero LUT!!!!!!!!!!!!!!!" << (*_i) << "     " << _temp << std::endl;

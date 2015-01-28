@@ -6,6 +6,8 @@
 #include "DataFormats/EcalDetId/interface/EcalTrigTowerDetId.h"
 #include "DataFormats/HcalDigi/interface/HcalTriggerPrimitiveSample.h"
 #include "DataFormats/EcalDigi/interface/EcalTriggerPrimitiveSample.h"
+#include "Geometry/HcalTowerAlgo/interface/HcalTrigTowerGeometry.h"
+
 
 class HcalTPGCompressor;
 class EcalTPGCompressor;
@@ -27,12 +29,8 @@ public:
   virtual ~CaloTPGTranscoder(); 
 
   enum Mode { All=0, RCT=1, HcalTPG=2, EcalTPG=3 };
-  /// Obtain any needed objects from the EventSetup.  Note that any member variables which are changed must be mutable.
-  virtual void setup(const edm::EventSetup& es, Mode mode=All) const;
-  /// Release any objects obtained from the EventSetup
-  virtual void releaseSetup() const;
   /** \brief Compression from linear samples+fine grain in the HTR */
-  virtual HcalTriggerPrimitiveSample hcalCompress(const HcalTrigTowerDetId& id, unsigned int sample, bool fineGrain) const = 0;
+  virtual HcalTriggerPrimitiveSample hcalCompress(const HcalTrigTowerDetId& id, unsigned int sample, bool fineGrain, HcalTrigTowerGeometry const&) const = 0;
   /** \brief Compression from linear samples+fine grain in the ECAL */
   virtual EcalTriggerPrimitiveSample ecalCompress(const EcalTrigTowerDetId& id, unsigned int sample, bool fineGrain) const = 0;
   /** \brief Uncompression for the Electron/Photon path in the RCT */
@@ -44,12 +42,12 @@ public:
 				   const EcalTrigTowerDetId& eid, const EcalTriggerPrimitiveSample& ec, 
 				   unsigned int& et) const = 0;
 
-  virtual double hcaletValue(const HcalTrigTowerDetId& hid, const HcalTriggerPrimitiveSample& hc) const = 0; 
-  boost::shared_ptr<HcalTPGCompressor> getHcalCompressor() const { return hccompress_; }
-  boost::shared_ptr<EcalTPGCompressor> getEcalCompressor() const { return eccompress_; }
+  virtual double hcaletValue(const HcalTrigTowerDetId& hid, const HcalTriggerPrimitiveSample& hc, HcalTrigTowerGeometry const& httg) const = 0; 
+  boost::shared_ptr<const HcalTPGCompressor> getHcalCompressor() const { return hccompress_; }
+  boost::shared_ptr<const EcalTPGCompressor> getEcalCompressor() const { return eccompress_; }
 private:
-  boost::shared_ptr<HcalTPGCompressor> hccompress_;
-  boost::shared_ptr<EcalTPGCompressor> eccompress_;
+  boost::shared_ptr<const HcalTPGCompressor> hccompress_;
+  boost::shared_ptr<const EcalTPGCompressor> eccompress_;
 };
 
 #endif
