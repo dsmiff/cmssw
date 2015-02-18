@@ -45,7 +45,7 @@ HcalHitReconstructor::HcalHitReconstructor(edm::ParameterSet const& conf):
   mcOOTCorrectionCategory_("MC"),
   setPileupCorrection_(0),
   setPileupCorrectionForNegative_(0),
-  paramTS(0)
+  paramTS(0),
 {
   // register for data access
   tok_hbhe_ = consumes<HBHEDigiCollection>(inputLabel_);
