@@ -62,6 +62,7 @@ void HcalDigiDump::analyze(edm::Event const& e, edm::EventSetup const& c) {
   }
   
   try {
+    cout << "HF digis" << endl;
     e.getManyByType(hf);
     std::vector<edm::Handle<HFDigiCollection> >::iterator i;
     for (i=hf.begin(); i!=hf.end(); i++) {
