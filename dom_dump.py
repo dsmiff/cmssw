@@ -20,7 +20,6 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 # Note that this assumes the 6X post-LS1 Monte Carlo
 process.GlobalTag.globaltag = cms.string('POSTLS162_V5::All')
 
-#process.load('SimCalorimetry.HcalTrigPrimProducers.hcaltpdigi_cff')
 
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
@@ -38,6 +37,8 @@ process.rctDigis.hcalDigis = cms.VInputTag(cms.InputTag("simHcalTriggerPrimitive
 
 #--- Create TP digis from unpacked digis
 process.load('SimCalorimetry.HcalTrigPrimProducers.hcaltpdigi_cff')
+#process.HcalTrigTowerGeometryESProducer.useFullGranularityHF = cms.bool( True )
+
 
 # The inputtags here might need to be changed if you don't see any trigger
 # primitives. If these tags aren't found, the code silently proceeds.

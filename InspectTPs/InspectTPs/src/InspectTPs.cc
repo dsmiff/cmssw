@@ -94,18 +94,20 @@ class InspectTPs : public edm::EDAnalyzer {
   //  edm::InputTag digis_;
   //  edm::InputTag rechits_;
 
-  TH2D *df_multiplicity_;
   TH2D *tp_multiplicity_;
 
   TTree *tps_;
-  
-  double tp_energy_;
-  double tp_linear_;
-  int tp_ieta_;
-  int tp_iphi_;
-  int tp_depth_max_;
-  int tp_sub_max_;
-  
+
+  static const  int kMax = 10000;
+  int ntps;
+
+  double tp_energy_[kMax];
+  double tp_linear_[kMax];
+  int tp_ieta_[kMax];
+  int tp_iphi_[kMax];
+  int tp_depth_max_[kMax];
+  int tp_sub_max_[kMax];
+  int tp_version_[kMax];
   
   
 };
@@ -113,21 +115,34 @@ class InspectTPs : public edm::EDAnalyzer {
 InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
   edm::EDAnalyzer(),
   first_(true)
-  //  frames_(iConfig.getParameter<std::vector<edm::InputTag>>("DataFrames")),
-  //  digis_(iConfig.getParameter<edm::InputTag>("TriggerPrimitives")),
-  //  rechits_(iConfig.getParameter<edm::InputTag>("RecHits"))
 
 {
+  ntps = 0;
+  
+  for(int i=0; i <kMax; i++){
+
+    tp_energy_[i] = 0;
+    tp_linear_[i] = 0;
+    tp_ieta_[i] = 0;
+    tp_iphi_[i] = 0;
+    tp_depth_max_[i] = 0;
+    tp_sub_max_[i] =0;
+    tp_version_[i] = 0;
+
+  }
+  
   edm::Service<TFileService> fs;
 
   tp_multiplicity_ = fs->make<TH2D>("tp_multiplicity", "TrigPrim multiplicity;ieta;iphi", 65, -32.5, 32.5, 72, 0.5, 72.5);
 
   tps_ = fs->make<TTree>("tps", "Trigger primitives");
-  tps_->Branch("et", &tp_energy_);
-  tps_->Branch("ieta", &tp_ieta_);
-  tps_->Branch("iphi", &tp_iphi_);
-  tps_->Branch("depth_max", &tp_depth_max_);
-  tps_->Branch("sub_mac", &tp_sub_max_);
+  tps_->Branch("ntps", &ntps);
+  tps_->Branch("version", tp_version_, "version[ntps]/I");
+  tps_->Branch("et", tp_energy_, "et[ntps]/D");
+  tps_->Branch("ieta", tp_ieta_, "ieta[ntps]/I");
+  tps_->Branch("iphi", tp_iphi_, "iphi[ntps]/I");
+  tps_->Branch("depth_max", tp_depth_max_, "depth_max[ntps]/I");
+  tps_->Branch("sub_mac", tp_sub_max_, "sub_mac[ntps]/I");
   
   consumesMany<HcalTrigPrimDigiCollection>();
   
@@ -154,31 +169,31 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    
    std::vector<edm::Handle<HcalTrigPrimDigiCollection> > htps;
    
-   //   vector<HcalTriggerPrimitiveDigi> tps;
-   vector<HcalTriggerPrimitiveDigi> triggvec;
+   //vector<HcalTriggerPrimitiveDigi> triggvec;
    
    iEvent.getManyByType(htps);
    std::vector<edm::Handle<HcalTrigPrimDigiCollection> >::iterator i;
+   int a =0;
    for (i=htps.begin(); i!=htps.end(); i++) {
      const HcalTrigPrimDigiCollection& c=*(*i);
      cout << c.size() << endl;
 
      for (HcalTrigPrimDigiCollection::const_iterator j=c.begin(); j!=c.end(); j++) {
        cout << *j << std::endl;
-       triggvec.push_back(*j);
+       cout << (*j).id().version() << std::endl;
+       tp_version_[a] = (*j).id().version();
+       tp_sub_max_[a]   = (*j).id().subdet();
+       tp_depth_max_[a] = (*j).id().depth();
+       tp_ieta_[a]  = (*j).id().ieta();
+       tp_iphi_[a]  = (*j).id().iphi();
+       tp_energy_[a] = (*j).SOI_compressedEt();
+       a++;
        }
    }
 
-  for( unsigned int a = 0 ; a < triggvec.size() ; a++ ) {
+   ntps = a;
 
-    tp_sub_max_   = triggvec[a].id().subdet();
-    tp_depth_max_ = triggvec[a].id().depth();
-    tp_ieta_  = triggvec[a].id().ieta();
-    tp_iphi_  = triggvec[a].id().iphi();
-    tp_energy_ = triggvec[a].SOI_compressedEt();
-  }
-
-  tps_->Fill();
+   tps_->Fill();
 }
 
 
