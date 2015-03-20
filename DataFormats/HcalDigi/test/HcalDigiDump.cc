@@ -90,13 +90,17 @@ void HcalDigiDump::analyze(edm::Event const& e, edm::EventSetup const& c) {
   }
 
   try {
+    cout << "hftps : " << endl;
     e.getManyByType(htp);
     std::vector<edm::Handle<HcalTrigPrimDigiCollection> >::iterator i;
     for (i=htp.begin(); i!=htp.end(); i++) {
       const HcalTrigPrimDigiCollection& c=*(*i);
+      cout << c.size() << endl;
       
       for (HcalTrigPrimDigiCollection::const_iterator j=c.begin(); j!=c.end(); j++)
 	cout << *j << std::endl;
+
+
 
     }
   } catch (...) {
@@ -194,11 +198,13 @@ void HcalDigiDump::analyze(edm::Event const& e, edm::EventSetup const& c) {
   }
   
   try {
+    cout << "hftps v1: " << endl;
     e.getManyByType(hup);
     std::vector<edm::Handle<HcalUpgradeDigiCollection> >::iterator i;
     for (i=hup.begin(); i!=hup.end(); i++) {
       const HcalUpgradeDigiCollection& c=*(*i);
-      
+      cout << c.size() << endl;
+
       for (HcalUpgradeDigiCollection::const_iterator j=c.begin(); j!=c.end(); j++)
 	cout << *j << std::endl;
     }

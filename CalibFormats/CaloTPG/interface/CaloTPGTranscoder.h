@@ -29,6 +29,10 @@ public:
   virtual ~CaloTPGTranscoder(); 
 
   enum Mode { All=0, RCT=1, HcalTPG=2, EcalTPG=3 };
+
+  //  virtual void setup(const edm::EventSetup& es, Mode mode=All) const;
+  /// Release any objects obtained from the EventSetup
+  //  virtual void releaseSetup() const;
   /** \brief Compression from linear samples+fine grain in the HTR */
   virtual HcalTriggerPrimitiveSample hcalCompress(const HcalTrigTowerDetId& id, unsigned int sample, bool fineGrain, HcalTrigTowerGeometry const&) const = 0;
   /** \brief Compression from linear samples+fine grain in the ECAL */
