@@ -176,11 +176,11 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    int a =0;
    for (i=htps.begin(); i!=htps.end(); i++) {
      const HcalTrigPrimDigiCollection& c=*(*i);
-     cout << c.size() << endl;
+     cout << "c size: " << c.size() << endl;
 
      for (HcalTrigPrimDigiCollection::const_iterator j=c.begin(); j!=c.end(); j++) {
-       cout << *j << std::endl;
-       cout << (*j).id().version() << std::endl;
+       cout << "*j: " <<  *j << std::endl;
+       cout << "Version: " << (*j).id().version() << std::endl;
        tp_version_[a] = (*j).id().version();
        tp_sub_max_[a]   = (*j).id().subdet();
        tp_depth_max_[a] = (*j).id().depth();
