@@ -100,6 +100,8 @@ class InspectTPs : public edm::EDAnalyzer {
 
   static const  int kMax = 10000;
   int ntps;
+  int ntpsv0;
+  int ntpsv1;
 
   double tp_energy_[kMax];
   double tp_linear_[kMax];
@@ -108,6 +110,24 @@ class InspectTPs : public edm::EDAnalyzer {
   int tp_depth_max_[kMax];
   int tp_sub_max_[kMax];
   int tp_version_[kMax];
+  
+  // V0
+  double tp_energy_v0[kMax];
+  double tp_linear_v0[kMax];
+  int tp_ieta_v0[kMax];
+  int tp_iphi_v0[kMax];
+  int tp_depth_max_v0[kMax];
+  int tp_sub_max_v0[kMax];
+  int tp_version_v0[kMax];
+
+  // V1
+  double tp_energy_v1[kMax];
+  double tp_linear_v1[kMax];
+  int tp_ieta_v1[kMax];
+  int tp_iphi_v1[kMax];
+  int tp_depth_max_v1[kMax];
+  int tp_sub_max_v1[kMax];
+  int tp_version_v1[kMax];
   
   
 };
@@ -118,7 +138,9 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
 
 {
   ntps = 0;
-  
+  ntpsv0 = 0;
+  ntpsv1 = 0;
+
   for(int i=0; i <kMax; i++){
 
     tp_energy_[i] = 0;
@@ -128,6 +150,25 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
     tp_depth_max_[i] = 0;
     tp_sub_max_[i] =0;
     tp_version_[i] = 0;
+
+    // V0
+    tp_energy_v0[i] = 0;
+    tp_linear_v0[i] = 0;
+    tp_ieta_v0[i] = 0;
+    tp_iphi_v0[i] = 0;
+    tp_depth_max_v0[i] = 0;
+    tp_sub_max_v0[i] =0;
+    tp_version_v0[i] = 0;
+
+    // V1
+    tp_energy_v1[i] = 0;
+    tp_linear_v1[i] = 0;
+    tp_ieta_v1[i] = 0;
+    tp_iphi_v1[i] = 0;
+    tp_depth_max_v1[i] = 0;
+    tp_sub_max_v1[i] =0;
+    tp_version_v1[i] = 0;
+
 
   }
   
@@ -143,6 +184,21 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
   tps_->Branch("iphi", tp_iphi_, "iphi[ntps]/I");
   tps_->Branch("depth_max", tp_depth_max_, "depth_max[ntps]/I");
   tps_->Branch("sub_mac", tp_sub_max_, "sub_mac[ntps]/I");
+  // Add only HF info
+  // v0
+  tps_->Branch("ntpsv0", &ntpsv0);
+  tps_->Branch("version0",tp_version_v0,"version0[ntpsv0]/I");
+  tps_->Branch("et_v0", tp_energy_v0, "et_v0[ntpsv0]/D");
+  tps_->Branch("ieta_v0", tp_ieta_v0, "ieta_v0[ntpsv0]/I");
+  tps_->Branch("iphi_v0",tp_iphi_v0, "iphi_v0[ntpsv0]/I");
+  
+
+  // Add v1
+  tps_->Branch("ntpsv1", &ntpsv1);
+  tps_->Branch("version1",tp_version_v1,"version1[ntpsv1]/I");
+  tps_->Branch("et_v1", tp_energy_v1, "et_v1[ntpsv1]/D");
+  tps_->Branch("ieta_v1",tp_ieta_v1, "ieta_v1[ntpsv1]/I");
+  tps_->Branch("iphi_v1",tp_iphi_v1, "iphi_v1[ntpsv1]/I");
   
   consumesMany<HcalTrigPrimDigiCollection>();
   
@@ -169,30 +225,54 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    
    std::vector<edm::Handle<HcalTrigPrimDigiCollection> > htps;
    
-   //vector<HcalTriggerPrimitiveDigi> triggvec;
    
    iEvent.getManyByType(htps);
    std::vector<edm::Handle<HcalTrigPrimDigiCollection> >::iterator i;
    int a =0;
+   int v0 =0;
+   int v1 =0;
    for (i=htps.begin(); i!=htps.end(); i++) {
      const HcalTrigPrimDigiCollection& c=*(*i);
      cout << "c size: " << c.size() << endl;
 
      for (HcalTrigPrimDigiCollection::const_iterator j=c.begin(); j!=c.end(); j++) {
        cout << "*j: " <<  *j << std::endl;
-       cout << "Version: " << (*j).id().version() << std::endl;
        tp_version_[a] = (*j).id().version();
        tp_sub_max_[a]   = (*j).id().subdet();
        tp_depth_max_[a] = (*j).id().depth();
        tp_ieta_[a]  = (*j).id().ieta();
        tp_iphi_[a]  = (*j).id().iphi();
        tp_energy_[a] = (*j).SOI_compressedEt();
-       a++;
+        
+       if ( (*j).id().version() ==0) { 
+	 tp_ieta_v0[v0] = (*j).id().ieta(); 
+	 cout << "version : "<< (*j).id().version() << endl;
+	 cout << "tp_ieta_v0[" << v0 << "] : " << tp_ieta_v0[v0] << endl;
+	 v0++;
        }
+       
+       if ( (*j).id().version() ==1) { 
+	 tp_ieta_v1[v1] = (*j).id().ieta(); 
+	 cout << "version : " << (*j).id().version() << endl;
+	 v1++;
+       }
+       
+       if ( (*j).id().version() != tp_version_[a] ) { cout << "ERROR THINGS NOT THE SAME" << std::endl; }
+       
+       a++;
+       //      v0++;
+       //      v1++;
+     }
    }
 
-   ntps = a;
 
+   ntps = a;
+   ntpsv0 = v0;
+   ntpsv1 = v1;
+
+   cout << "ntps: " << a << endl;
+   cout << "ntpsv0: " << ntpsv0 << endl;
+   cout << "ntpsv1: " << ntpsv1 << endl;
    tps_->Fill();
 }
 
