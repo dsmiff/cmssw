@@ -125,6 +125,7 @@ class InspectTPs : public edm::EDAnalyzer {
   double tp_linear_v1[kMax];
   int tp_ieta_v1[kMax];
   int tp_iphi_v1[kMax];
+  int tp_iphi_v1_eta40[kMax];
   int tp_depth_max_v1[kMax];
   int tp_sub_max_v1[kMax];
   int tp_version_v1[kMax];
@@ -165,6 +166,7 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
     tp_linear_v1[i] = 0;
     tp_ieta_v1[i] = 0;
     tp_iphi_v1[i] = 0;
+    tp_iphi_v1_eta40[i] = 0;
     tp_depth_max_v1[i] = 0;
     tp_sub_max_v1[i] =0;
     tp_version_v1[i] = 0;
@@ -199,7 +201,8 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
   tps_->Branch("et_v1", tp_energy_v1, "et_v1[ntpsv1]/D");
   tps_->Branch("ieta_v1",tp_ieta_v1, "ieta_v1[ntpsv1]/I");
   tps_->Branch("iphi_v1",tp_iphi_v1, "iphi_v1[ntpsv1]/I");
-  
+  tps_->Branch("iphi_v1_eta40",tp_iphi_v1_eta40, "iphi_v1eta_40[ntpsv1]/I");
+
   consumesMany<HcalTrigPrimDigiCollection>();
   
 }
@@ -245,25 +248,34 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        tp_energy_[a] = (*j).SOI_compressedEt();
         
        if ( (*j).id().version() ==0) { 
-	 tp_ieta_v0[v0] = (*j).id().ieta(); 
-	 cout << "version : "<< (*j).id().version() << endl;
-	 cout << "tp_ieta_v0[" << v0 << "] : " << tp_ieta_v0[v0] << endl;
-	 v0++;
+	 if ( std::abs((*j).id().ieta()) > 28 ) {
+	   tp_ieta_v0[v0] = (*j).id().ieta(); 
+	   tp_iphi_v0[v0] = (*j).id().iphi();
+	   v0++;
+	 }
        }
-       
-       if ( (*j).id().version() ==1) { 
+
+       if ( (*j).id().version() ==1)  { 
+	 if ( std::abs((*j).id().ieta()) > 28 ) {
 	 tp_ieta_v1[v1] = (*j).id().ieta(); 
-	 cout << "version : " << (*j).id().version() << endl;
+	 tp_iphi_v1[v1] = (*j).id().iphi();
+	 if ( std::abs((*j).id().ieta()) > 40) { 
+	   tp_iphi_v1_eta40[v1] = (*j).id().iphi();
+	 }
 	 v1++;
+	 }
        }
+
        
+
+
+
        if ( (*j).id().version() != tp_version_[a] ) { cout << "ERROR THINGS NOT THE SAME" << std::endl; }
        
        a++;
-       //      v0++;
-       //      v1++;
+
      }
-   }
+    }
 
 
    ntps = a;
