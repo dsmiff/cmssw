@@ -95,6 +95,7 @@ class InspectTPs : public edm::EDAnalyzer {
   //  edm::InputTag rechits_;
 
   TH2D *tp_multiplicity_;
+  TH2D *tp_energyCorr_;
 
   TTree *tps_;
 
@@ -112,6 +113,7 @@ class InspectTPs : public edm::EDAnalyzer {
   int tp_version_[kMax];
   
   // V0
+  double Et_v0;
   double tp_energy_v0[kMax];
   double tp_linear_v0[kMax];
   int tp_ieta_v0[kMax];
@@ -121,6 +123,7 @@ class InspectTPs : public edm::EDAnalyzer {
   int tp_version_v0[kMax];
 
   // V1
+  double Et_v1;
   double tp_energy_v1[kMax];
   double tp_linear_v1[kMax];
   int tp_ieta_v1[kMax];
@@ -177,6 +180,7 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
   edm::Service<TFileService> fs;
 
   tp_multiplicity_ = fs->make<TH2D>("tp_multiplicity", "TrigPrim multiplicity;ieta;iphi", 65, -32.5, 32.5, 72, 0.5, 72.5);
+  tp_energyCorr_ = fs->make<TH2D>("tp_energy_corr","TrigPrim Et correlation", 100, 0, 100, 100, 0, 100);
 
   tps_ = fs->make<TTree>("tps", "Trigger primitives");
   tps_->Branch("ntps", &ntps);
@@ -188,6 +192,7 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
   tps_->Branch("sub_mac", tp_sub_max_, "sub_mac[ntps]/I");
   // Add only HF info
   // v0
+  tps_->Branch("Et_v0", &Et_v0);
   tps_->Branch("ntpsv0", &ntpsv0);
   tps_->Branch("version0",tp_version_v0,"version0[ntpsv0]/I");
   tps_->Branch("et_v0", tp_energy_v0, "et_v0[ntpsv0]/D");
@@ -196,6 +201,7 @@ InspectTPs::InspectTPs(const edm::ParameterSet& iConfig):
   
 
   // Add v1
+  tps_->Branch("Et_v1", &Et_v1);
   tps_->Branch("ntpsv1", &ntpsv1);
   tps_->Branch("version1",tp_version_v1,"version1[ntpsv1]/I");
   tps_->Branch("et_v1", tp_energy_v1, "et_v1[ntpsv1]/D");
@@ -251,6 +257,8 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	 if ( std::abs((*j).id().ieta()) > 28 ) {
 	   tp_ieta_v0[v0] = (*j).id().ieta(); 
 	   tp_iphi_v0[v0] = (*j).id().iphi();
+	   tp_energy_v0[v0] = (*j).SOI_compressedEt();
+	   Et_v0 += (*j).SOI_compressedEt();
 	   v0++;
 	 }
        }
@@ -259,6 +267,10 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	 if ( std::abs((*j).id().ieta()) > 28 ) {
 	 tp_ieta_v1[v1] = (*j).id().ieta(); 
 	 tp_iphi_v1[v1] = (*j).id().iphi();
+	 tp_energy_v1[v1] = (*j).SOI_compressedEt();
+	 Et_v1 += (*j).SOI_compressedEt();
+
+	   // Checking phi granularity for ieta 40 & 41
 	 if ( std::abs((*j).id().ieta()) > 40) { 
 	   tp_iphi_v1_eta40[v1] = (*j).id().iphi();
 	 }
@@ -285,6 +297,8 @@ InspectTPs::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    cout << "ntps: " << a << endl;
    cout << "ntpsv0: " << ntpsv0 << endl;
    cout << "ntpsv1: " << ntpsv1 << endl;
+   cout << "Et v0: " << Et_v0 << endl;
+   cout << "Et v1: " << Et_v1 << endl;
    tps_->Fill();
 }
 
