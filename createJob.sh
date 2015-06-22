@@ -19,6 +19,7 @@ mkdir $DATE
 changeDir
 wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt
 createBatchScript
+chmod 777 lxplusbatchscript.sh
 cp ../das_client.py .
 cp ../miniAOD-prod_BATCH.py .
 ARRAY="$(grep -Po '".*?"' Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt | tr -d '"')"
