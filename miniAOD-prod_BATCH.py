@@ -21,12 +21,13 @@ process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(-1)
 )
 
-# Input source
+# Input source -- CHANGE ACCORDING TO SAMPLES
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(['/store/data/Run2015A/Commissioning/AOD/PromptReco-v1/000/246/951/00000/0E3B9C6A-2B0C-E511-AEC0-02163E013653.root',
                                        '/store/data/Run2015A/Commissioning/AOD/PromptReco-v1/000/246/951/00000/189003F4-7B0C-E511-931E-02163E0145E7.root']),
     secondaryFileNames = cms.untracked.vstring()
 )
+# CHANGE ACCORDING TO JSON DOWNLOADED
 import FWCore.PythonUtilities.LumiList as LumiList 
 process.source.lumisToProcess = LumiList.LumiList(filename = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_3/src/Cert_246908-247381_13TeV_PromptReco_Collisions15_ZeroTesla_JSON.txt').getVLuminosityBlockRange()
 
@@ -54,7 +55,7 @@ process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
     dropMetaData = cms.untracked.string('ALL'),
     eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
     fastCloning = cms.untracked.bool(False),
-    fileName = cms.untracked.string('miniAOD-prod_PAT_BATCH_firsttwo.root'),
+    fileName = cms.untracked.string('miniAOD-prod_PAT_BATCH.root'),
     outputCommands = process.MINIAODEventContent.outputCommands,
     overrideInputFileSplitLevels = cms.untracked.bool(True)
 )
