@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("GCT020")
+process = cms.Process("GCTO2O")
 
 ## Import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
