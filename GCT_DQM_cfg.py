@@ -18,7 +18,6 @@ process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 
 ## Global tags:
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-# Note that this assumes the 6X post-LS1 Monte Carlo
 process.GlobalTag.globaltag = cms.string('GR_P_V56')
 
 
@@ -27,7 +26,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.source = cms.Source("PoolSource",
 
-        fileNames = cms.untracked.vstring('root://xrootd.unl.edu//store/data/Run2015A/Commissioning/AOD/PromptReco-v1/000/246/951/00000/0E3B9C6A-2B0C-E511-AEC0-02163E013653.root')
+        fileNames = cms.untracked.vstring('root://xrootd.unl.edu//store/data/Run2015A/Jet/RAW/v1/000/246/960/00000/7E8B3217-3E0A-E511-A104-02163E0144CE.root')
 
 )
 
@@ -35,13 +34,7 @@ process.gctDigis.numberOfGctSamplesToUnpack = cms.uint32(1)
 process.simGctDigis.inputLabel = cms.InputTag('gctDigis')
 process.simGctDigis.writeInternalData = cms.bool(True)
 
-process.load('L1Trigger.RegionalCaloTrigger.rctDigis_cfi')
-process.rctDigis.hcalDigis = cms.VInputTag(cms.InputTag("simHcalTriggerPrimitiveDigis"))
-
-#--- Dump digi information ---#
-process.dump  = cms.EDAnalyzer("EventContentAnalyzer")
-# Don't use
-
+# Path
 process.p = cms.Path(
     process.gctDigis
     *process.simGctDigis
