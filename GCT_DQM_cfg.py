@@ -26,9 +26,14 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.source = cms.Source("PoolSource",
 
-        fileNames = cms.untracked.vstring('root://xrootd.unl.edu//store/data/Run2015A/Jet/RAW/v1/000/246/960/00000/7E8B3217-3E0A-E511-A104-02163E0144CE.root')
+        fileNames = cms.untracked.vstring('root://xrootd.unl.edu//store/data/Run2015A/L1MinimumBias/RAW/v1/000/247/612/00000/AA9A78F7-D60F-E511-A531-02163E013835.root')
 
 )
+
+#process.load('L1TriggerConfig.GctConfigProducers.l1GctConfig_cfi')
+#process.L1GctConfigProducers.JetFinderCentralJetSeed = cms.double(0.5)
+#process.L1GctConfigProducers.JetFinderForwardJetSeed = cms.double(0.5)
+
 
 process.gctDigis.numberOfGctSamplesToUnpack = cms.uint32(1)
 process.simGctDigis.inputLabel = cms.InputTag('gctDigis')
@@ -49,7 +54,7 @@ process.output = cms.OutputModule(
         'keep *_simGctDigis_*_*',
         'keep *_simGctDigisRCT_*_*',
         ),
-    fileName = cms.untracked.string('GCTDataEmulator.root')
+    fileName = cms.untracked.string('GCTDataEmulatorL1MinBias_bug.root')
     )
 
 process.output_step = cms.EndPath(process.output)
