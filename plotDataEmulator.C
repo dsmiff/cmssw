@@ -1,5 +1,5 @@
 { 
-  TFile f("GCTDataEmulator.root");
+  TFile f("GCTDataEmulatorL1MinBias_bug.root");
   TTree * tree;
   f.GetObject("Events", tree);
 
@@ -38,35 +38,32 @@
   // Cen jets---------------------------------
   tree->Draw("L1GctJetCands_gctDigis_cenJets_GCTO2O.obj.rank()>>hDataRank","L1GctJetCands_gctDigis_cenJets_GCTO2O.obj.rank()> 0");
   tree->Draw("L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.rank()>>hEmuRank","L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.rank()> 0");
-  tree->Draw("L1GctJetCands_gctDigis_cenJets_GCTO2O.obj.etaIndex()>>hDataEtaIndex");			   
-  tree->Draw("L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.etaIndex()>>hEmuEtaIndex");
-  tree->Draw("L1GctJetCands_gctDigis_cenJets_GCTO2O.obj.phiIndex()>>hDataPhiIndex");			   
-  tree->Draw("L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.phiIndex()>>hEmuPhiIndex");
+  tree->Draw("L1GctJetCands_gctDigis_cenJets_GCTO2O.obj.etaIndex()>>hDataEtaIndex","L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.rank()> 0");			   
+  tree->Draw("L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.etaIndex()>>hEmuEtaIndex","L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.rank()> 0");
+  tree->Draw("L1GctJetCands_gctDigis_cenJets_GCTO2O.obj.phiIndex()>>hDataPhiIndex","L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.rank()> 0");			   
+  tree->Draw("L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.phiIndex()>>hEmuPhiIndex","L1GctJetCands_simGctDigis_cenJets_GCTO2O.obj.rank()> 0");
   
   // Forward jets------------------------------
   tree->Draw("L1GctJetCands_gctDigis_forJets_GCTO2O.obj.rank()>>hDataForRank","L1GctJetCands_gctDigis_forJets_GCTO2O.obj.rank()> 0");
   tree->Draw("L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.rank()>>hEmuForRank","L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.rank()> 0");
-  tree->Draw("L1GctJetCands_gctDigis_forJets_GCTO2O.obj.etaIndex()>>hDataForEtaIndex");         
-  tree->Draw("L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.etaIndex()>>hEmuForEtaIndex");
-  tree->Draw("L1GctJetCands_gctDigis_forJets_GCTO2O.obj.phiIndex()>>hDataForPhiIndex");         
-  tree->Draw("L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.phiIndex()>>hEmuForPhiIndex");
+  tree->Draw("L1GctJetCands_gctDigis_forJets_GCTO2O.obj.etaIndex()>>hDataForEtaIndex","L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.rank()> 0");         
+  tree->Draw("L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.etaIndex()>>hEmuForEtaIndex","L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.rank()> 0");
+  tree->Draw("L1GctJetCands_gctDigis_forJets_GCTO2O.obj.phiIndex()>>hDataForPhiIndex","L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.rank()> 0");         
+  tree->Draw("L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.phiIndex()>>hEmuForPhiIndex","L1GctJetCands_simGctDigis_forJets_GCTO2O.obj.rank()> 0");
 
   // Tau jets------------------------------
   tree->Draw("L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.rank()>>hDataTauRank","L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.rank()> 0");
   tree->Draw("L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.rank()>>hEmuTauRank","L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.rank()> 0");
-  tree->Draw("L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.etaIndex()>>hDataTauEtaIndex");         
-  tree->Draw("L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.etaIndex()>>hEmuTauEtaIndex");
-  tree->Draw("L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.phiIndex()>>hDataTauPhiIndex");         
-  tree->Draw("L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.phiIndex()>>hEmuTauPhiIndex");
+  tree->Draw("L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.etaIndex()>>hDataTauEtaIndex","L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.rank()> 0");         
+  tree->Draw("L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.etaIndex()>>hEmuTauEtaIndex","L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.rank()> 0");
+  tree->Draw("L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.phiIndex()>>hDataTauPhiIndex","L1GctJetCands_gctDigis_tauJets_GCTO2O.obj.rank()> 0");         
+  tree->Draw("L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.phiIndex()>>hEmuTauPhiIndex","L1GctJetCands_simGctDigis_tauJets_GCTO2O.obj.rank()> 0");
 
   // Cen jets---------------------------------
   hDataRank->SetLineColor(2);
   hEmuRank->SetLineColor(3);
   hDataRank->SetLineStyle(9);
 
-  hDataEtaIndex->SetLineColor(2);
-  hEmuEtaIndex->SetLineColor(3);
-  hDataEtaIndex->SetLineStyle(9);
 
   hDataPhiIndex->SetLineColor(2);
   hEmuPhiIndex->SetLineColor(3);
@@ -75,31 +72,42 @@
   TLegend leg(0.5, 0.5, 0.8, 0.8);
   leg.AddEntry(hDataRank, "Cen Jets Data Rank","L");
   leg.AddEntry(hEmuRank, "Cen Jet Emulator Rank","L");
-  hEmuRank->SetTitle("Cen Jets rank");
-  hEmuRank->Draw();
-  hDataRank->Draw("SAME");
+  leg.SetBorderSize(0);
+  leg.SetFillStyle(0);
+  hDataRank->SetTitle("Cen Jets rank");
+  hDataRank->Draw();
+  hEmuRank->Draw("SAME");
   leg.Draw();
-  c1->SaveAs("GctDataEmu_CenJetCands_rank.pdf");
+  c1->SaveAs("GctDataEmu_CenJetCands_rank_L1MinBias_Run247612_NOFIX.pdf");
 
   
   TLegend leg2(0.5, 0.5, 0.8, 0.8);
   leg2.AddEntry(hDataRank, "Cen Jets Data EtaIndex","L");
   leg2.AddEntry(hEmuRank, "Cen Jets Emulator EtaIndex","L");
-  hEmuEtaIndex->SetTitle("Cen Jets Eta Index");
-  hEmuEtaIndex->Draw();
-  hDataEtaIndex->Draw("SAME");
+  leg2.SetBorderSize(0);
+  leg2.SetFillStyle(0);
+  hDataEtaIndex->SetLineColor(2);
+  hEmuEtaIndex->SetLineColor(3);
+  hDataEtaIndex->SetLineStyle(9);
+  hDataEtaIndex->SetTitle("Cen Jets Eta Index");
+  hDataEtaIndex->Draw(); 
+  hDataEtaIndex->SetMinimum(0);
+  hEmuEtaIndex->Draw("SAME");
   leg2.Draw();
-  c1->SaveAs("GctDataEmu_CenJetCands_EtaIndex.pdf");
+  c1->SaveAs("GctDataEmu_CenJetCands_EtaIndex_L1MinBias_Run247612_NOFIX.pdf");
 
   
   TLegend leg3(0.5, 0.5, 0.8, 0.8);
   leg3.AddEntry(hDataRank, "Cen Jets Data PhiIndex","L");
   leg3.AddEntry(hEmuRank, "Cen Jets Emulator PhiIndex","L");
-  hEmuPhiIndex->SetTitle("Cen Jets Phi Index");
-  hEmuPhiIndex->Draw();
-  hDataPhiIndex->Draw("SAME");
+  leg3.SetBorderSize(0);
+  leg3.SetFillStyle(0);
+  hDataPhiIndex->SetTitle("Cen Jets Phi Index");
+  hDataPhiIndex->Draw();
+  hDataPhiIndex->SetMinimum(0);
+  hEmuPhiIndex->Draw("SAME");
   leg3.Draw();
-  c1->SaveAs("GctDataEmu_CenJetCands_PhiIndex.pdf");
+  c1->SaveAs("GctDataEmu_CenJetCands_PhiIndex_L1MinBias_Run247612_NOFIX.pdf");
 
 
 // For jets---------------------------------
@@ -118,31 +126,39 @@
   TLegend leg4(0.5, 0.5, 0.8, 0.8);
   leg4.AddEntry(hDataForRank, "For Jets Data Rank","L");
   leg4.AddEntry(hEmuForRank, "For Jet Emulator Rank","L");
-  hEmuForRank->SetTitle("For Jets rank");
-  hEmuForRank->Draw();
-  hDataForRank->Draw("SAME");
+  leg4.SetBorderSize(0);
+  leg4.SetFillStyle(0);
+  hDataForRank->SetTitle("For Jets rank");
+  hDataForRank->Draw();
+  hEmuForRank->Draw("SAME");
   leg4.Draw();
-  c1->SaveAs("GctDataEmu_ForJetCands_rank.pdf");
+  c1->SaveAs("GctDataEmu_ForJetCands_rank_L1MinBias_Run247612_NOFIX.pdf");
 
   
   TLegend leg5(0.5, 0.5, 0.8, 0.8);
   leg5.AddEntry(hDataForRank, "For Jets Data EtaIndex","L");
   leg5.AddEntry(hEmuForRank, "For Jets Emulator EtaIndex","L");
-  hEmuForEtaIndex->SetTitle("For Jets Eta Index");
-  hEmuForEtaIndex->Draw();
-  hDataForEtaIndex->Draw("SAME");
+  leg5.SetBorderSize(0);
+  leg5.SetFillStyle(0);
+  hDataForEtaIndex->SetTitle("For Jets Eta Index");
+  hDataForEtaIndex->Draw();
+  hDataForEtaIndex->SetMinimum(0);
+  hEmuForEtaIndex->Draw("SAME");
   leg5.Draw();
-  c1->SaveAs("GctDataEmu_ForJetCands_EtaIndex.pdf");
+  c1->SaveAs("GctDataEmu_ForJetCands_EtaIndex_L1MinBias_Run247612_NOFIX.pdf");
 
   
   TLegend leg6(0.5, 0.5, 0.8, 0.8);
   leg6.AddEntry(hDataForRank, "For Jets Data PhiIndex","L");
   leg6.AddEntry(hEmuForRank, "For Jets Emulator PhiIndex","L");
-  hEmuForPhiIndex->SetTitle("For Jets Phi Index");
-  hEmuForPhiIndex->Draw();
-  hDataForPhiIndex->Draw("SAME");
+  leg6.SetBorderSize(0);
+  leg6.SetFillStyle(0);
+  hDataForPhiIndex->SetTitle("For Jets Phi Index");
+  hDataForPhiIndex->Draw();
+  hDataForPhiIndex->SetMinimum(0);
+  hEmuForPhiIndex->Draw("SAME");
   leg6.Draw();
-  c1->SaveAs("GctDataEmu_ForJetCands_PhiIndex.pdf");
+  c1->SaveAs("GctDataEmu_ForJetCands_PhiIndexL1MinBias_Run247612_NOFIX.pdf");
 
 // Tau jets---------------------------------
   hDataTauRank->SetLineColor(2);
@@ -160,30 +176,38 @@
   TLegend leg7(0.5, 0.5, 0.8, 0.8);
   leg7.AddEntry(hDataForRank, "Tau Jets Data Rank","L");
   leg7.AddEntry(hEmuForRank, "Tau Jet Emulator Rank","L");
-  hEmuTauRank->SetTitle("Tau Jets rank");
-  hEmuTauRank->Draw();
-  hDataTauRank->Draw("SAME");
+  leg7.SetBorderSize(0);
+  leg7.SetFillStyle(0);
+  hDataTauRank->SetTitle("Tau Jets rank");
+  hDataTauRank->Draw();
+  hEmuTauRank->Draw("SAME");
   leg7.Draw();
-  c1->SaveAs("GctDataEmu_TauJetCands_rank.pdf");
+  c1->SaveAs("GctDataEmu_TauJetCands_rankL1MinBias_Run247612_NOFIX.pdf");
 
   
   TLegend leg8(0.5, 0.5, 0.8, 0.8);
   leg8.AddEntry(hDataTauRank, "Tau Jets Data EtaIndex","L");
   leg8.AddEntry(hEmuTauRank, "Tau Jets Emulator EtaIndex","L");
-  hEmuTauEtaIndex->SetTitle("Tau Jets Eta Index");
-  hEmuTauEtaIndex->Draw();
-  hDataTauEtaIndex->Draw("SAME");
+  leg8.SetBorderSize(0);
+  leg8.SetFillStyle(0);
+  hDataTauEtaIndex->SetTitle("Tau Jets Eta Index");
+  hDataTauEtaIndex->Draw();
+  hDataTauEtaIndex->SetMinimum(0);
+  hEmuTauEtaIndex->Draw("SAME");
   leg8.Draw();
-  c1->SaveAs("GctDataEmu_TauJetCands_EtaIndex.pdf");
+  c1->SaveAs("GctDataEmu_TauJetCands_EtaIndexL1MinBias_Run247612_NOFIX.pdf");
 
   
   TLegend leg9(0.5, 0.5, 0.8, 0.8);
   leg9.AddEntry(hDataForRank, "Tau Jets Data PhiIndex","L");
   leg9.AddEntry(hEmuForRank, "Tau Jets Emulator PhiIndex","L");
-  hEmuTauPhiIndex->SetTitle("Tau Jets Phi Index");
-  hEmuTauPhiIndex->Draw();
-  hDataTauPhiIndex->Draw("SAME");
+  leg9.SetBorderSize(0);
+  leg9.SetFillStyle(0);
+  hDataTauPhiIndex->SetTitle("Tau Jets Phi Index");
+  hDataTauPhiIndex->Draw();
+  hDataTauPhiIndex->SetMinimum(0);
+  hEmuTauPhiIndex->Draw("SAME");
   leg9.Draw();
-  c1->SaveAs("GctDataEmu_TauJetCands_PhiIndex.pdf");
+  c1->SaveAs("GctDataEmu_TauJetCands_PhiIndexL1MinBias_Run247612_NOFIX.pdf");
 
 }
