@@ -12,7 +12,7 @@ config = Configuration()
 config.section_("General")
 
 # Request name must be specified
-config.General.requestName   = 'DomsMiniAODTest_v5'
+config.General.requestName   = 'MiniAOD_prod'
 #config.General.workArea   = '/path/to/workarea'
 
 # Specify a custom server.  This is almost never used; the defaults will point at the central server.
@@ -28,7 +28,9 @@ config.section_("JobType")
 #config.JobType.pluginName  = 'Analysis'
 ## The plugin for MC Private Production
 #config.JobType.pluginName  = 'PrivateMC'
-config.JobType.psetName    = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/miniAOD_prod_CRAB.py'
+
+## Full path needed, need to change for individual user
+config.JobType.psetName    = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/miniAOD-PROD_CRAB.py'
 
 ## Does the job read any additional private file:
 #config.JobType.inputFiles  = ['/tmp/input_file']
@@ -47,6 +49,7 @@ config.Data.splitting = 'LumiBased'
 config.Data.unitsPerJob = 20
 
 ## For lumiMask http and https urls are also allowed
+## Full path is needed, need to change to individual user
 config.Data.lumiMask = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/'
 
 ## If you are splitting a Private MC Production task
@@ -69,6 +72,8 @@ config.section_("User")
 #config.User.group = 'Analysis'
 #config.User.email = ''
 
+
+# Storage site can change if necessary
 config.section_("Site")
 config.Site.storageSite = 'T2_UK_SGrid_Bristol'
 config.Data.outLFNDirBase = '/store/user/dosmith/'
