@@ -28,7 +28,7 @@ config.section_("JobType")
 #config.JobType.pluginName  = 'Analysis'
 ## The plugin for MC Private Production
 #config.JobType.pluginName  = 'PrivateMC'
-config.JobType.psetName    = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/2015-06-23/miniAOD-prod_BATCH.py'
+config.JobType.psetName    = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/'
 ## Does the job read any additional private file:
 #config.JobType.inputFiles  = ['/tmp/input_file']
 ## Does the job write any output files that need to be collected BESIDES those in output modules or TFileService
@@ -46,7 +46,7 @@ config.Data.splitting = 'LumiBased'
 config.Data.unitsPerJob = 20
 
 ## For lumiMask http and https urls are also allowed
-config.Data.lumiMask = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/2015-06-23/Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt'
+config.Data.lumiMask = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/'
 
 ## If you are splitting a Private MC Production task
 ## you must specify the total amount of data to generate
