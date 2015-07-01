@@ -29,7 +29,7 @@ wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Colli
 
 # Copy relevant files to jobs directory
 cp ../das_client.py .
-cp ../miniAOD-prod_BATCH.py .
+cp ../miniAOD-PROD_CRAB.py .
 cp ../CrabConfiguration.py .
 sed -i 's@/src/@/src/'"$JOBDIR"'/@g' CrabConfiguration.py
 
