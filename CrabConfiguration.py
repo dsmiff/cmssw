@@ -28,7 +28,8 @@ config.section_("JobType")
 #config.JobType.pluginName  = 'Analysis'
 ## The plugin for MC Private Production
 #config.JobType.pluginName  = 'PrivateMC'
-config.JobType.psetName    = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/'
+config.JobType.psetName    = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/miniAOD_prod_CRAB.py'
+
 ## Does the job read any additional private file:
 #config.JobType.inputFiles  = ['/tmp/input_file']
 ## Does the job write any output files that need to be collected BESIDES those in output modules or TFileService
