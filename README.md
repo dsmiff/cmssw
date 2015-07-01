@@ -18,7 +18,7 @@ config.Data.lumiMask
 where the JSON file passed should be the one downloaded in the jobs directory.
 After making the necessary changes, please submit to crab with
 ```
-crab submit
+crab submit CrabConfiguarition.py
 ```
 
 
