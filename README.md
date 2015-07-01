@@ -5,9 +5,24 @@
 ### Setup
 Create working area with latest certified runs via:
 ``` shell
-       source createJob.sh
+source createJob.sh
 ```
 which will create a directory according to the date. 
+#To submit with CRAB3
+After running createJob.sh, you can submit your jobs to CRAB3 using the template CRAB config that has been copied from the main directory.
+The items to change are
+```
+config.Data.inputDataset
+config.Data.lumiMask
+```
+where the JSON file passed should be the one downloaded in the jobs directory.
+After making the necessary changes, please submit to crab with
+```
+crab submit
+```
+
+
+#To run on the batch
 In the directory, there will be:
 ```
 lxplusbatchscript.sh
