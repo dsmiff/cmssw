@@ -21,15 +21,17 @@ process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(-1)
 )
 
-# Input source -- CHANGE ACCORDING TO SAMPLES
+# Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring(['/store/data/Run2015A/Commissioning/AOD/PromptReco-v1/000/246/951/00000/0E3B9C6A-2B0C-E511-AEC0-02163E013653.root',
-                                       '/store/data/Run2015A/Commissioning/AOD/PromptReco-v1/000/246/951/00000/189003F4-7B0C-E511-931E-02163E0145E7.root']),
+    fileNames = cms.untracked.vstring(['/store/data/Run2015A/EGamma/AOD/PromptReco-v1/000/246/958/00000/300FCE61-D00B-E511-9F20-02163E014686.root',
+                                       '/store/data/Run2015A/EGamma/AOD/PromptReco-v1/000/246/958/00000/72F7DB47-570C-E511-AD0C-02163E014353.root',
+                                       '/store/data/Run2015A/EGamma/AOD/PromptReco-v1/000/246/958/00000/7C81FAAE-DE0B-E511-A8BB-02163E011CDC.root',
+                                       '/store/data/Run2015A/EGamma/AOD/PromptReco-v1/000/246/958/00000/842C9FC6-D30B-E511-9AD6-02163E0143B6.root',
+                                       '/store/data/Run2015A/EGamma/AOD/PromptReco-v1/000/246/958/00000/F45E685C-C80B-E511-8054-02163E0121D4.root']),
     secondaryFileNames = cms.untracked.vstring()
 )
-# CHANGE ACCORDING TO JSON DOWNLOADED
 import FWCore.PythonUtilities.LumiList as LumiList 
-process.source.lumisToProcess = LumiList.LumiList(filename = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_3/src/Cert_246908-247381_13TeV_PromptReco_Collisions15_ZeroTesla_JSON.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = '/afs/cern.ch/work/d/dosmith/CMGTools/CMSSW_7_4_5/src/Cert_246908-247381_13TeV_PromptReco_Collisions15_ZeroTesla_Run246958_EGamma_JSON.txt').getVLuminosityBlockRange()
 
 
 process.options = cms.untracked.PSet(
@@ -55,7 +57,7 @@ process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
     dropMetaData = cms.untracked.string('ALL'),
     eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
     fastCloning = cms.untracked.bool(False),
-    fileName = cms.untracked.string('miniAOD-prod_PAT_BATCH.root'),
+    fileName = cms.untracked.string('miniAOD-prod_PAT_BATCH_Run246958_EGamma.root'),
     outputCommands = process.MINIAODEventContent.outputCommands,
     overrideInputFileSplitLevels = cms.untracked.bool(True)
 )

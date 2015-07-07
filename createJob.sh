@@ -28,9 +28,9 @@ changeDir
 wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt
 
 # Copy relevant files to jobs directory
-cp ../das_client.py .
-cp ../miniAOD-PROD_CRAB.py .
-cp ../CrabConfiguration.py .
+cp ../python/das_client.py .
+cp ../python/miniAOD-PROD_CRAB.py .
+cp ../python/CrabConfiguration.py .
 sed -i 's@/src/@/src/'"$JOBDIR"'/@g' CrabConfiguration.py
 
 ARRAY="$(grep -Po '".*?"' Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt | tr -d '"')"
