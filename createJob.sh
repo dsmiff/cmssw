@@ -1,18 +1,18 @@
-createBatchScript() {
+function createBatchScript() {
+cat > ./lxplusbatchscript.sh <<EOF
+export CMSSW_PROJECT_SRC="CMGTools/CMSSW_7_4_3/src"
+export CFG_FILE="miniAOD-prod_BATCH.py"
+export OUTPUT_FILE="miniAOD-prod_PAT_BATCH.root"
+export TOP=\$PWD
 
-echo "export CMSSW_PROJECT_SRC=\"CMGTools/CMSSW_7_4_3/src\" " > lxplusbatchscript.sh  
-echo "export CFG_FILE=\"miniAOD-prod_BATCH.py\" " >> lxplusbatchscript.sh
-echo "export OUTPUT_FILE=\"miniAOD-prod_PAT_BATCH.root\" " >> lxplusbatchscript.sh
-echo "export TOP=\"\$PWD\" " >> lxplusbatchscript.sh
-echo " " >> lxplusbatchscript.sh
+cd /afs/cern.ch/work/d/dosmith/\$CMSSW_PROJECT_SRC
+eval \`scramv1 runtime -sh\`
+cd \$TOP
+cmsRun /afs/cern.ch/work/d/dosmith/\$CMSSW_PROJECT_SRC/\$CFG_FILE
+rfcp miniAOD-prod_PAT_BATCH.root /afs/cern.ch/work/d/dosmith/public/alphat/\$OUTPUT_FILE
+EOF
 
-echo "cd /afs/cern.ch/work/d/dosmith/$CMSSW_PROJECT_SRC" >> lxplusbatchscript.sh
-echo "eval \`scramv1 runtime -sh\` "  >> lxplusbatchscript.sh
-echo "cd $TOP" >> lxplusbatchscript.sh
-echo "cmsRun /afs/cern.ch/work/d/dosmith/$CMSSW_PROJECT_SRC/$CFG_FILE" >> lxplusbatchscript.sh
-echo "rfcp miniAOD-prod_PAT_BATCH.root /afs/cern.ch/work/d/dosmith/public/alphat/$OUTPUT_FILE" >> lxplusbatchscript.sh
-
-chmod 777 lxplusbatchscript.sh
+chmod +x lxplusbatchscript.sh
 }
 
 DATE=$(date +"%d_%b_%y_%H%M")
@@ -25,6 +25,7 @@ else
     exit 1
 fi
 changeDir
+createBatchScript
 wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt
 
 # Copy relevant files to jobs directory
