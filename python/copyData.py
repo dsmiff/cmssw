@@ -3,6 +3,7 @@
 import os
 import sys
 import optparse
+from os import popen
 
 # Bristol SE: lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/user
 # Imperial SE: gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms%s'
@@ -12,12 +13,17 @@ bristol = "soolin.phy.bris.ac.uk"
 imperial = "ic.ac.uk"
 cern = "cern.ch"
 
+#dir="/JetHT/JetHT_13TeV_Data/150629_160238/0000/"
+
+
 ##__________________________________________________________
 def parse_args():
     parser = optparse.OptionParser()
     parser.add_option("--ls",action='store_true',default=True, help="List samples in SE")
-    parser.add_option("--dry-run", action = "store_true", default = False, help = "do not run any commands; only print them")
+    parser.add_option("--dry_run", action = "store_true", default = False, help = "do not run any commands; only print them")
     parser.add_option("-H", "--HOST", help = "HOST")
+    parser.add_option("-C","--COPY", default=False, help ="Copy data")
+    parser.add_option("--add_user", action="store_true",default=False, help="List contents for user")
     (options,args) = parser.parse_args()
                 
     return options
@@ -38,13 +44,14 @@ def _check_host(host, user):
         elif 'bristol' in HOST:
             SEdir = 'gsiftp://lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/'
             _listSamples(host,user,SEdir)
+            _copySamples(host,user,SEdir)
         elif 'cern' in HOST:
-            SEdir = 'srm://srm-eoscms.cern.ch//eos/cms/store/data'
+            SEdir = 'srm://srm-eoscms.cern.ch//eos/cms/store/'
             _listSamples(host, user, SEdir)
 
     else:
         if cern in host:
-            SEdir = 'srm://srm-eoscms.cern.ch//eos/cms/store/data'
+            SEdir = 'srm://srm-eoscms.cern.ch//eos/cms/store/'
             _listSamples(host, user, SEdir)
         elif bristol in host:
             SEdir = 'gsiftp://lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/'
@@ -56,27 +63,49 @@ def _check_host(host, user):
             sys.exit("HOST not found")
 
 
-
 ##____________________________________________________________
 def _listSamples(host, user, SEdir):
 
     options = parse_args()
-    if options.ls:
-        cmd = ['gfal-ls']
-    else:
-        cmd = ['gfal-copy']
 
+    if options.add_user:
+        SEdir=SEdir+"user/"+user
+#    if  dir:
+#       SEdir=SEdir+dir
+#        print SEdir
+
+    options = parse_args()
+
+    cmd = ['gfal-ls']
     cmd.append(SEdir)
     cmd = ' '.join(cmd)
-
+    
     if options.dry_run:
-        print cmd
+        print 'cmd ',cmd
     else:
         print "Host ", host
         print "-> " , cmd
         os.system(cmd)
-        
+        os.popen("sleep 1")
     
+##____________________________________________________________
+def _copySamples(host,user,SEdir):
+
+    options = parse_args()
+    cmd = ['gfal-ls']
+
+    if options.add_user:
+        SEdir=SEdir+"user/"+user
+
+    cmd.append(SEdir)
+    cmd.append('| xargs -iI echo gfal-copy ' + SEdir)
+
+    cmd = ' '.join(cmd)
+    if options.dry_run:
+        print 'copy cmd ' , cmd
+    else:
+        print "-> " , cmd
+        os.system(cmd)
 
 ##____________________________________________________________
 def main():
@@ -95,10 +124,6 @@ def main():
 
 ##____________________________________________________________
 if __name__ == '__main__':
-    """
-    Define HOST names
-    """
-
     """
     Run main()
     """
