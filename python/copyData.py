@@ -5,7 +5,7 @@ import sys
 import optparse
 import subprocess
 import logging
-
+ 
 # Bristol SE: lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/user
 # Imperial SE: gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms%s'
 # CERN SE: eoscms.cern.ch//eos/cms
