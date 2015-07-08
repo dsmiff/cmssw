@@ -20,6 +20,24 @@ After making the necessary changes, please submit to crab with
 ```
 crab submit CrabConfiguarition.py
 ```
+#To manage contents of Storage Site (awaiting mirror directory structures)
+```
+./python/copyData.py -H <host> --dry-run 
+```
+where `<host>` is 'bristol', 'imperial' or 'cern'.
+If left unfilled, scipt lists current hosts SE
+This requires a valid GRID certificate:
+```
+voms-proxy-init --voms-cms
+```
+The `source` and `destination` of the transfer can be given via the arguments `--from-site` and `--to-site`.
+The output of the script is a file containing the necessary `gfal-copy`:
+```
+fileList.sh
+```
+Should a user specifically desire to access their samples, pass the `--add_user` command.
+A `dry-run` will list and execute the `gfal-ls` command.
+
 
 
 #To run on the batch
