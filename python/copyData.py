@@ -4,7 +4,7 @@ import os
 import sys
 import optparse
 import subprocess
-from os import popen
+import logging
 
 # Bristol SE: lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/user
 # Imperial SE: gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms%s'
@@ -14,15 +14,16 @@ bristol = "soolin.phy.bris.ac.uk"
 imperial = "ic.ac.uk"
 cern = "cern.ch"
 
-#dir="/JetHT/JetHT_13TeV_Data/150629_160238/0000/"
-
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+logging.basicConfig(filename='copyData.log',level=logging.INFO)
 
 ##__________________________________________________________
 def parse_args():
     parser = optparse.OptionParser()
     parser.add_option("--dry_run", action = "store_true", default = False, help = "do not run any commands; only print them")
     parser.add_option("-H", "--HOST", help = "HOST")
-    parser.add_option("--add_user", action="store_true",default=False, help="List contents for user")
+    parser.add_option("--add_user", action="store_true",default=True, help="List contents for user")
     parser.add_option("--from-site",action="store",dest="FROM_SITE",default="",help="SOURCE")
     parser.add_option("--to-site",action="store",dest="TO_SITE",default="",help="DESTINATION")
     (options,args) = parser.parse_args()
@@ -45,11 +46,9 @@ def _check_host(host, user):
         elif 'bristol' in HOST:
             SEdir = 'gsiftp://lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/'
             _listSamples(host,user,SEdir)
-            _copySamples(host,user,SEdir)
         elif 'cern' in HOST:
             SEdir = 'srm://srm-eoscms.cern.ch//eos/cms/store/'
             _listSamples(host, user, SEdir)
-
     else:
         if cern in host:
             SEdir = 'srm://srm-eoscms.cern.ch//eos/cms/store/'
@@ -63,17 +62,30 @@ def _check_host(host, user):
         else:
             sys.exit("HOST not found")
 
-
 ##____________________________________________________________
+def _listDir(SEdir):
+
+    proc = subprocess.Popen(['gfal-ls',SEdir],stdout=subprocess.PIPE)
+    tmp = proc.stdout.read()
+#    print 'type ' ,tmp.split()
+    ret = [ ]
+    logging.info('Directory %s', tmp)
+    for d in tmp.split():
+        if d.endswith('.root'):
+            ret.append(os.path.join(SEdir,d))
+        else:
+            ret.extend(_listDir(os.path.join(SEdir,d)))
+    return ret
+
+##_____________________________________________________________
 def _listSamples(host, user, SEdir):
 
     options = parse_args()
 
+    ReadFile_ = open("list.txt","r")
+
     if options.add_user:
         SEdir=SEdir+"user/"+user
-#    if  dir:
-#       SEdir=SEdir+dir
-#        print SEdir
 
     options = parse_args()
 
@@ -86,33 +98,31 @@ def _listSamples(host, user, SEdir):
     else:
         print "Host ", host
         print "-> " , cmd
+        CompList = _listDir(SEdir)
         os.system(cmd)
-        os.popen("sleep 1")
-    
+        _Copy(CompList)
+
 ##____________________________________________________________
-def _copySamples(host,user,SEdir):
+def _Copy(CompList):
 
     options = parse_args()
-    cmd = ['gfal-ls']
 
-    if options.add_user:
-        SEdir=SEdir+"user/"+user
-
-    cmd.append(SEdir)
-    cmd.append('| xargs -iI echo gfal-copy ' + SEdir)
-
-    # Copy output of command to script
-    cmd.append(' > fileList.sh')
-    cmd = ' '.join(cmd)
-
-    if options.dry_run:
-        print 'copy cmd ' , cmd
+    file_ = open("fileList.sh","w")
+    
+    if options.TO_SITE == 'imperial':
+        DestDir = 'srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/'
+    elif options.TO_SITE == 'bristol':
+        DestDir = 'gsiftp://lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/'
+    elif options.TO_SITE == 'cern':
+        DestDir = 'srm://srm-eoscms.cern.ch//eos/cms/store/'
     else:
-        print "-> " , cmd
-        os.system(cmd)
+        print "Need to specifiy destination site"
+
+    for item in CompList:
+        item = 'gfal-copy '+ item + ' ' + DestDir +"\n"
+        file_.write(item)
+    file_.close()
     print "Output in fileList.sh"
-
-
 
 ##____________________________________________________________
 def main():
@@ -126,8 +136,8 @@ def main():
         sys.exit(1)
         
     _check_host(host, user)
-
-
+    logging.info('Host %s', host)
+    logging.info('User %s', user)
 
 ##____________________________________________________________
 if __name__ == '__main__':
