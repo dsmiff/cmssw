@@ -3,6 +3,7 @@
 import os
 import sys
 import optparse
+import subprocess
 from os import popen
 
 # Bristol SE: lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/user
@@ -19,11 +20,11 @@ cern = "cern.ch"
 ##__________________________________________________________
 def parse_args():
     parser = optparse.OptionParser()
-    parser.add_option("--ls",action='store_true',default=True, help="List samples in SE")
     parser.add_option("--dry_run", action = "store_true", default = False, help = "do not run any commands; only print them")
     parser.add_option("-H", "--HOST", help = "HOST")
-    parser.add_option("-C","--COPY", default=False, help ="Copy data")
     parser.add_option("--add_user", action="store_true",default=False, help="List contents for user")
+    parser.add_option("--from-site",action="store",dest="FROM_SITE",default="",help="SOURCE")
+    parser.add_option("--to-site",action="store",dest="TO_SITE",default="",help="DESTINATION")
     (options,args) = parser.parse_args()
                 
     return options
@@ -100,12 +101,18 @@ def _copySamples(host,user,SEdir):
     cmd.append(SEdir)
     cmd.append('| xargs -iI echo gfal-copy ' + SEdir)
 
+    # Copy output of command to script
+    cmd.append(' > fileList.sh')
     cmd = ' '.join(cmd)
+
     if options.dry_run:
         print 'copy cmd ' , cmd
     else:
         print "-> " , cmd
         os.system(cmd)
+    print "Output in fileList.sh"
+
+
 
 ##____________________________________________________________
 def main():
