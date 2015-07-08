@@ -19,7 +19,7 @@ config.General.requestName   = 'MiniAOD_prod'
 
 ## Specific option of the job type
 ## these options are directly readable from the job type plugin
-config.section_("Data")
+config.section_("JobType")
 
 '''
 Full path needed, need to change for individual user
