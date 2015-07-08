@@ -39,6 +39,14 @@ Should a user specifically desire to access their samples, pass the `--add_user`
 A `dry-run` will list and execute the `gfal-ls` command.
 
 
+#To calculate the integrated luminosity using lcr2
+Use the interim `python/lcr2.py` with the arugments:
+```
+python python/lcr2.py -r <run number>
+python python/lcr2.py -i <json txt>
+python python/lcr2.py -f <fill>
+```
+
 
 #To run on the batch
 In the directory, there will be:
