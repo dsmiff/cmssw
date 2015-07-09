@@ -26,7 +26,7 @@ else
 fi
 changeDir
 createBatchScript
-wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt
+wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/DCSOnly/json_DCSONLY_Run2015B.txt
 
 # Copy relevant files to jobs directory
 cp ../python/das_client.py .
@@ -34,12 +34,12 @@ cp ../python/miniAOD-PROD_CRAB.py .
 cp ../python/CrabConfiguration.py .
 sed -i 's@/src/@/src/'"$JOBDIR"'/@g' CrabConfiguration.py
 
-ARRAY="$(grep -Po '".*?"' Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON_CaloOnly.txt | tr -d '"')"
+ARRAY="$(grep -Po '".*?"' json_DCSONLY_Run2015B.txt | tr -d '"')"
 echo "Certified runs:"
 echo $ARRAY
 echo " "
 echo "Find dataset with: "
-for i in ${ARRAY};  do echo " " ./das_client.py --query=\"dataset dataset=/*/Run2015A-PromptReco-v1/AOD run="${i}"\" --limit 0; done
+for i in ${ARRAY};  do echo " " ./das_client.py --query=\"dataset dataset=/*/Run2015B-PromptReco-v1/AOD run="${i}"\" --limit 0; done
 
 echo " " 
 echo "Please edit the CrabConfiguration file to select your desired dataset and JSON file"

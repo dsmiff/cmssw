@@ -46,6 +46,8 @@ config.Data.splitting = 'LumiBased'
 #config.Data.splitting = 'EventBased'
 #config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 20
+NJOBS = 10
+config.Data.totalUnits = config.Data.unitsPerJob * NJOBS
 
 ## For lumiMask http and https urls are also allowed
 ## Full path is needed, need to change to individual user
