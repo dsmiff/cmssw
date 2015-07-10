@@ -39,7 +39,18 @@ fileList.sh
 ```
 Should a user specifically desire to access their samples, pass the `--add_user` command.
 A `dry-run` will list and execute the `gfal-ls` command.
-
+##To list the directories of T2_UK_SGrid_Bristol
+```
+gfal-ls gsiftp://lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/
+```
+##To list the directories of T2_UK_London_IC
+```
+gfal-ls gsiftp://lcgse01.phy.bris.ac.uk/dpm/phy.bris.ac.uk/home/cms/store/
+```
+##To list the directories of T2_CERN_CH
+```
+gfal-ls srm://srm-eoscms.cern.ch//eos/cms/store/
+```
 
 #To calculate the integrated luminosity using lcr2
 Use the interim `python/lcr2.py` with the arugments:
