@@ -2,13 +2,15 @@
 
 [DAS](https://cmsweb.cern.ch/das/)
 
+NB: T0 waits 48h to process the data in the physics stream before AOD production can begin (once prompt calibrations are in place)
+
 ### Setup
 Create working area with latest certified runs via:
 ``` shell
 source createJob.sh
 ```
 which will create a directory according to the date. 
-#To submit with CRAB3
+#Privately produce miniAOD from AOD
 After running createJob.sh, you can submit your jobs to CRAB3 using the template CRAB config that has been copied from the main directory.
 The items to change are
 ```
